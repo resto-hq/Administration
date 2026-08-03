@@ -11,7 +11,10 @@ export default function SmoothScrollProvider({ children }: { children: ReactNode
     lenis.on("scroll", ScrollTrigger.update);
 
     function raf(time: number) {
-      lenis.raf(time);
+      // gsap.ticker reports elapsed time in seconds; Lenis.raf expects a
+      // millisecond-scale timestamp (it derives its own deltaTime and
+      // multiplies by .001 internally), so convert seconds -> ms here.
+      lenis.raf(time * 1000);
     }
     gsap.ticker.add(raf);
     gsap.ticker.lagSmoothing(0);
