@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 
 export default function FinalCta() {
   const [email, setEmail] = useState("");
@@ -15,10 +16,19 @@ export default function FinalCta() {
   }
 
   return (
-    <section id="waitlist" className="py-24 px-6 bg-secondary text-white text-center">
-      <h2 className="text-3xl font-bold mb-4">Prêt à faire connaître ton resto ?</h2>
-      <p className="text-white/70 max-w-md mx-auto mb-8">
-        Laisse ton email, on te contacte dès l'ouverture des inscriptions
+    <section id="waitlist" className="py-24 px-6 bg-ink text-paper text-center">
+      <Image
+        src="/logo-mark.png"
+        alt="Resto"
+        width={160}
+        height={54}
+        className="mx-auto mb-8 h-10 w-auto"
+      />
+      <h2 className="text-stamp text-3xl md:text-4xl mb-4">
+        Prêt à faire connaître ton resto ?
+      </h2>
+      <p className="text-paper/70 max-w-md mx-auto mb-8">
+        Laisse ton email, on te contacte dès l&apos;ouverture des inscriptions
         restaurateurs.
       </p>
       {submitted ? (
@@ -36,13 +46,13 @@ export default function FinalCta() {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="ton@email.com"
-            className="flex-1 rounded-full px-5 py-3 text-secondary bg-white outline-none"
+            className="cut-corners-sm flex-1 px-5 py-3 text-ink bg-paper outline-none placeholder:text-ink/40"
           />
           <button
             type="submit"
-            className="bg-primary text-white font-semibold rounded-full px-6 py-3 hover:opacity-90 transition-opacity"
+            className="cut-corners-sm bg-primary text-paper font-semibold px-6 py-3 shadow-[5px_5px_0_var(--color-mustard)] transition-transform duration-150 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[7px_7px_0_var(--color-mustard)] active:translate-x-0.5 active:translate-y-0.5 active:shadow-[2px_2px_0_var(--color-mustard)]"
           >
-            Rejoindre la liste d'attente
+            Rejoindre la liste d&apos;attente
           </button>
         </form>
       )}

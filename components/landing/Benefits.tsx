@@ -27,22 +27,35 @@ const BENEFITS = [
 
 export default function Benefits() {
   return (
-    <section className="bg-canvas-alt py-24 px-6">
-      <h2 className="text-3xl font-bold text-secondary text-center mb-12">
-        Pourquoi Resto
+    <section className="bg-paper-alt py-24 px-6">
+      <p className="text-center text-xs font-semibold tracking-[0.3em] text-primary-dark">
+        POURQUOI RESTO
+      </p>
+      <h2 className="text-stamp mt-3 text-center text-3xl text-ink md:text-4xl">
+        Ce que tu gagnes en rejoignant Resto
       </h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+
+      <div className="mx-auto mt-14 grid max-w-6xl grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
         {BENEFITS.map((benefit, index) => (
           <motion.div
             key={benefit.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="bg-white rounded-2xl p-6 space-y-3"
+            initial={{ opacity: 0, y: 30, rotate: index % 2 === 0 ? -4 : 4 }}
+            whileInView={{ opacity: 1, y: 0, rotate: index % 2 === 0 ? -1.5 : 1.5 }}
+            whileHover={{ rotate: 0, y: -4 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.5, delay: index * 0.08, ease: "backOut" }}
+            className="relative cut-corners-sm bg-paper p-6 pt-8 shadow-[5px_5px_0_var(--color-ink)]"
           >
-            <h3 className="font-semibold text-secondary text-lg">{benefit.title}</h3>
-            <p className="text-secondary/70 text-sm">{benefit.description}</p>
+            <span
+              aria-hidden
+              className="absolute -left-3 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-paper-alt"
+            />
+            <span
+              aria-hidden
+              className="absolute -right-3 top-1/2 h-6 w-6 -translate-y-1/2 rounded-full bg-paper-alt"
+            />
+            <h3 className="text-stamp text-lg text-ink">{benefit.title}</h3>
+            <p className="mt-2 text-sm text-ink/70">{benefit.description}</p>
           </motion.div>
         ))}
       </div>

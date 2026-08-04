@@ -2,11 +2,57 @@
 
 @theme {
   --color-primary: #FF5C01;
-  --color-secondary: #1F2937;
-  --color-canvas: #F8F8F8;
-  --color-canvas-alt: #EDEEF3;
+  --color-primary-dark: #C2410C;
+  --color-ink: #1A1613;
+  --color-paper: #FBF4E8;
+  --color-paper-alt: #F3E8D3;
+  --color-mustard: #F2B705;
+  --color-secondary: #1A1613;
+  --color-canvas: #FBF4E8;
+  --color-canvas-alt: #F3E8D3;
 }
 
 @theme inline {
   --font-sans: var(--font-lufga);
+}
+
+@layer base {
+  ::selection {
+    background: var(--color-primary);
+    color: var(--color-paper);
+  }
+}
+
+@layer utilities {
+  /* Paper grain: mimics faded hand-painted maquis signage instead of a flat SaaS background. */
+  .bg-grain {
+    position: relative;
+  }
+  .bg-grain::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    mix-blend-mode: multiply;
+    background-image: radial-gradient(circle at 1px 1px, rgba(26, 22, 19, 0.08) 1px, transparent 0);
+    background-size: 4px 4px;
+  }
+
+  /* Echoes the cut-corner lettering of the RESTO wordmark on key headlines/stamps. */
+  .cut-corners {
+    clip-path: polygon(
+      1.2rem 0, 100% 0, 100% calc(100% - 1.2rem), calc(100% - 1.2rem) 100%, 0 100%, 0 1.2rem
+    );
+  }
+  .cut-corners-sm {
+    clip-path: polygon(
+      0.5rem 0, 100% 0, 100% calc(100% - 0.5rem), calc(100% - 0.5rem) 100%, 0 100%, 0 0.5rem
+    );
+  }
+
+  .text-stamp {
+    letter-spacing: -0.02em;
+    font-weight: 700;
+  }
 }
