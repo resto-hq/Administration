@@ -1,9 +1,8 @@
-import PageHeader from "@/components/dashboard/PageHeader";
+"use client";
 
-const RESERVATIONS = [
-  { nom: "Sena K.", personnes: 4, date: "Ven. 7 août, 20h00", statut: "En attente" },
-  { nom: "Elom T.", personnes: 2, date: "Sam. 8 août, 13h00", statut: "Confirmée" },
-];
+import PageHeader from "@/components/dashboard/PageHeader";
+import DataTable from "@/components/dashboard/DataTable";
+import { RESERVATIONS } from "@/lib/mockData";
 
 export default function ReservationsPage() {
   return (
@@ -11,31 +10,54 @@ export default function ReservationsPage() {
       <PageHeader
         eyebrow="TABLES"
         title="Réservations"
-        subtitle="Les demandes de réservation reçues via ta fiche Resto."
+        subtitle="Les demandes de réservation reçues via la fiche de tes restaurants."
       />
 
-      <div className="max-w-2xl space-y-4">
-        {RESERVATIONS.map((r) => (
-          <div
-            key={r.nom + r.date}
-            className="cut-corners-sm flex items-center justify-between gap-4 bg-paper p-5 shadow-[4px_4px_0_var(--color-ink)]"
-          >
-            <div>
-              <p className="font-semibold text-ink">{r.nom}</p>
-              <p className="text-sm text-ink/70">
-                {r.personnes} pers. · {r.date}
-              </p>
-            </div>
-            <span
-              className={`cut-corners-sm shrink-0 px-3 py-1 text-xs font-semibold ${
-                r.statut === "Confirmée" ? "bg-ink text-paper" : "bg-mustard/40 text-ink"
-              }`}
-            >
-              {r.statut}
-            </span>
-          </div>
-        ))}
-      </div>
+      <DataTable
+        rows={RESERVATIONS}
+        getRowKey={(r) => r.id}
+        getRowHref={(r) => `/dashboard/reservations/${r.id}`}
+        emptyMessage="Aucune réservation pour le moment."
+        columns={[
+          {
+            key: "nom",
+            label: "Client",
+            render: (r) => <span className="font-semibold">{r.nom}</span>,
+          },
+          {
+            key: "date",
+            label: "Date",
+            sortValue: (r) => r.date,
+            render: (r) => r.date,
+          },
+          {
+            key: "personnes",
+            label: "Personnes",
+            sortValue: (r) => r.personnes,
+            render: (r) => r.personnes,
+          },
+          {
+            key: "resto",
+            label: "Restaurant",
+            sortValue: (r) => r.restoNom,
+            render: (r) => r.restoNom,
+          },
+          {
+            key: "statut",
+            label: "Statut",
+            sortValue: (r) => r.statut,
+            render: (r) => (
+              <span
+                className={`cut-corners-sm px-3 py-1 text-xs font-semibold ${
+                  r.statut === "Confirmée" ? "bg-ink text-paper" : "bg-mustard/40 text-ink"
+                }`}
+              >
+                {r.statut}
+              </span>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }

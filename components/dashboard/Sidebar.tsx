@@ -7,15 +7,8 @@ const NAV_ITEMS: NavItem[] = [
     icon: <path d="M4 4h6v6H4V4Zm10 0h6v6h-6V4ZM4 14h6v6H4v-6Zm10 0h6v6h-6v-6Z" />,
   },
   {
-    href: "/dashboard/verification",
-    label: "Vérification (KYB)",
-    icon: (
-      <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Zm-1.5 10.5-2-2-1.4 1.4 3.4 3.4 5.4-5.4-1.4-1.4-4 4Z" />
-    ),
-  },
-  {
-    href: "/dashboard/fiche",
-    label: "Ma fiche",
+    href: "/dashboard/restaurants",
+    label: "Mes restaurants",
     icon: <path d="M4 4h16v4H4V4Zm0 6h16v10H4V10Zm2 2v2h5v-2H6Z" />,
   },
   {

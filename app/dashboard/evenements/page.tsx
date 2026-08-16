@@ -1,9 +1,9 @@
+"use client";
+
 import PageHeader from "@/components/dashboard/PageHeader";
 import StampButton from "@/components/StampButton";
-
-const EVENEMENTS = [
-  { titre: "Soirée dégustation vins locaux", date: "Jeu. 13 août" },
-];
+import DataTable from "@/components/dashboard/DataTable";
+import { EVENEMENTS } from "@/lib/mockData";
 
 export default function EvenementsPage() {
   return (
@@ -14,13 +14,26 @@ export default function EvenementsPage() {
         subtitle="Annonce tes soirées et dégustations auprès des gourmets déjà là pour manger."
       />
 
-      <div className="max-w-2xl space-y-4">
-        {EVENEMENTS.map((e) => (
-          <div key={e.titre} className="cut-corners-sm bg-paper p-5 shadow-[4px_4px_0_var(--color-ink)]">
-            <p className="font-semibold text-ink">{e.titre}</p>
-            <p className="mt-1 text-sm text-ink/70">{e.date}</p>
-          </div>
-        ))}
+      <div className="space-y-4">
+        <DataTable
+          rows={EVENEMENTS}
+          getRowKey={(e) => e.id}
+          getRowHref={(e) => `/dashboard/evenements/${e.id}`}
+          emptyMessage="Aucun événement publié pour le moment."
+          columns={[
+            {
+              key: "titre",
+              label: "Titre",
+              render: (e) => <span className="font-semibold">{e.titre}</span>,
+            },
+            {
+              key: "date",
+              label: "Date",
+              sortValue: (e) => e.date,
+              render: (e) => e.date,
+            },
+          ]}
+        />
 
         <StampButton type="button">+ Publier un événement</StampButton>
       </div>

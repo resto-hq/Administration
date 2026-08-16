@@ -7,17 +7,6 @@ import AuthLayout from "@/components/auth/AuthLayout";
 import FormField from "@/components/auth/FormField";
 import StampButton from "@/components/StampButton";
 
-const QUARTIERS_LOME = [
-  "Bè",
-  "Tokoin",
-  "Adidogomé",
-  "Agoè",
-  "Kodjoviakopé",
-  "Nyékonakpoè",
-  "Hanoukopé",
-  "Djidjolé",
-];
-
 export default function InscriptionPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
@@ -42,7 +31,7 @@ export default function InscriptionPage() {
       }
     >
       <form onSubmit={handleSubmit} className="space-y-5">
-        <FormField label="Nom du restaurant" id="nom" type="text" placeholder="Chez Ama" required />
+        <FormField label="Nom complet" id="nom" type="text" placeholder="Ama Kokou" required />
         <FormField
           label="Numéro de téléphone"
           id="numero"
@@ -51,22 +40,14 @@ export default function InscriptionPage() {
           required
         />
         <FormField label="Email" id="email" type="email" placeholder="toi@resto.com" required />
-        <FormField label="Mot de passe" id="password" type="password" placeholder="••••••••" required minLength={8} />
-        <div>
-          <FormField
-            label="Quartier à Lomé"
-            id="lieu"
-            type="text"
-            list="quartiers-lome"
-            placeholder="Tokoin"
-            required
-          />
-          <datalist id="quartiers-lome">
-            {QUARTIERS_LOME.map((quartier) => (
-              <option key={quartier} value={quartier} />
-            ))}
-          </datalist>
-        </div>
+        <FormField
+          label="Mot de passe"
+          id="password"
+          type="password"
+          placeholder="••••••••"
+          required
+          minLength={8}
+        />
 
         <StampButton type="submit" disabled={submitting} className="w-full">
           {submitting ? "Création en cours…" : "Créer mon compte restaurateur"}

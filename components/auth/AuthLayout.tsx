@@ -14,7 +14,7 @@ export default function AuthLayout({
   footer: ReactNode;
 }) {
   return (
-    <main className="relative flex min-h-screen items-center justify-center bg-canvas bg-grain px-6 py-16">
+    <main className="relative flex min-h-screen items-center justify-center overflow-x-hidden bg-canvas bg-grain px-6 py-16">
       <div
         aria-hidden
         className="absolute -top-24 -right-24 h-72 w-72 rotate-12 bg-mustard/25 cut-corners"
