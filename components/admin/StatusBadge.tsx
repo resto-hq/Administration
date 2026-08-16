@@ -1,6 +1,7 @@
 import type { RestaurantStatus } from "@/lib/mockData";
 
 const STYLES: Record<RestaurantStatus, string> = {
+  "non soumis": "bg-ink/10 text-ink/60",
   "validé": "bg-ink text-paper",
   "en attente": "bg-mustard/40 text-ink",
   "rejeté": "bg-primary/15 text-primary-dark",

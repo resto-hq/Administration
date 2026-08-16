@@ -11,7 +11,7 @@ export default function SidebarNav({ items, badge }: { items: NavItem[]; badge?:
   const pathname = usePathname();
 
   return (
-    <aside className="flex w-full flex-col gap-1 bg-ink px-3 py-4 md:w-64 md:min-h-screen md:py-8">
+    <aside className="flex w-full flex-col gap-1 bg-ink px-3 py-4 md:sticky md:top-0 md:h-screen md:w-64 md:shrink-0 md:overflow-y-auto md:py-8">
       <Link href="/" className="mb-6 hidden items-center justify-center gap-2 px-2 md:flex">
         <Image src="/logo-mark.png" alt="Resto" width={140} height={48} className="h-8 w-auto" />
         {badge && (
