@@ -1,20 +1,12 @@
 "use client";
 
-import { useState } from "react";
 import PageHeader from "@/components/dashboard/PageHeader";
 import StampButton from "@/components/StampButton";
-import { KYB_QUEUE } from "@/lib/mockData";
-
-type Decision = "approuvé" | "rejeté";
+import DataTable from "@/components/dashboard/DataTable";
+import { useKyb } from "@/lib/kyb-store";
 
 export default function VerificationsPage() {
-  const [pending, setPending] = useState(KYB_QUEUE);
-  const [decided, setDecided] = useState<{ nom: string; decision: Decision }[]>([]);
-
-  function decide(nom: string, decision: Decision) {
-    setPending((current) => current.filter((dossier) => dossier.nom !== nom));
-    setDecided((current) => [{ nom, decision }, ...current]);
-  }
+  const { dossiers, decided, decide } = useKyb();
 
   return (
     <div>
@@ -24,47 +16,74 @@ export default function VerificationsPage() {
         subtitle="Examine les dossiers envoyés par les restaurateurs et valide leur établissement."
       />
 
-      <div className="max-w-2xl space-y-4">
-        {pending.length === 0 && (
-          <p className="text-sm text-ink/60">Aucun dossier en attente pour le moment.</p>
-        )}
-
-        {pending.map((dossier) => (
-          <div key={dossier.nom} className="cut-corners-sm bg-paper p-5 shadow-[4px_4px_0_var(--color-ink)]">
-            <div className="flex flex-wrap items-baseline justify-between gap-2">
-              <p className="text-stamp text-ink">{dossier.nom}</p>
-              <p className="text-xs text-ink/50">Envoyé le {dossier.soumis}</p>
-            </div>
-            <p className="mt-1 text-sm text-ink/70">
-              {dossier.quartier} · RCCM {dossier.rccm}
-            </p>
-            <div className="mt-4 flex gap-3">
-              <StampButton type="button" onClick={() => decide(dossier.nom, "approuvé")}>
-                Approuver
-              </StampButton>
-              <StampButton type="button" variant="ink" onClick={() => decide(dossier.nom, "rejeté")}>
-                Rejeter
-              </StampButton>
-            </div>
+      <DataTable
+        rows={dossiers}
+        getRowKey={(d) => d.id}
+        getRowHref={(d) => `/admin/verifications/${d.id}`}
+        emptyMessage="Aucun dossier en attente pour le moment."
+        columns={[
+          {
+            key: "nom",
+            label: "Dossier",
+            sortValue: (d) => d.nom,
+            render: (d) => <span className="font-semibold">{d.nom}</span>,
+          },
+          {
+            key: "quartier",
+            label: "Quartier",
+            sortValue: (d) => d.quartier,
+            render: (d) => d.quartier,
+          },
+          { key: "rccm", label: "RCCM", render: (d) => d.rccm },
+          {
+            key: "soumis",
+            label: "Envoyé le",
+            sortValue: (d) => d.soumis,
+            render: (d) => d.soumis,
+          },
+        ]}
+        actions={(d) => (
+          <div className="flex justify-end gap-2">
+            <StampButton
+              type="button"
+              className="!px-3 !py-1.5 text-xs"
+              onClick={() => decide(d.id, "approuvé")}
+            >
+              ✓
+            </StampButton>
+            <StampButton
+              type="button"
+              variant="ink"
+              className="!px-3 !py-1.5 text-xs"
+              onClick={() => decide(d.id, "rejeté")}
+            >
+              ✗
+            </StampButton>
           </div>
-        ))}
-
-        {decided.length > 0 && (
-          <div className="pt-4">
-            <p className="mb-3 text-xs font-semibold tracking-[0.2em] text-ink/50">TRAITÉS</p>
-            <div className="space-y-2">
-              {decided.map((d) => (
-                <div key={d.nom} className="flex items-center justify-between text-sm text-ink/70">
-                  <span>{d.nom}</span>
-                  <span className={d.decision === "approuvé" ? "text-ink font-semibold" : "text-primary-dark font-semibold"}>
-                    {d.decision}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
         )}
-      </div>
+      />
+
+      {decided.length > 0 && (
+        <div className="mt-8">
+          <p className="mb-3 text-xs font-semibold tracking-[0.2em] text-ink/50">TRAITÉS</p>
+          <div className="space-y-2">
+            {decided.map((d) => (
+              <div key={d.id} className="flex items-center justify-between text-sm text-ink/70">
+                <span>{d.nom}</span>
+                <span
+                  className={
+                    d.decision === "approuvé"
+                      ? "font-semibold text-ink"
+                      : "font-semibold text-primary-dark"
+                  }
+                >
+                  {d.decision}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

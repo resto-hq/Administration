@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PageHeader from "@/components/dashboard/PageHeader";
+import DataTable from "@/components/dashboard/DataTable";
 import { MEMBRES } from "@/lib/mockData";
 
 export default function AdminMembresPage() {
@@ -30,21 +31,41 @@ export default function AdminMembresPage() {
         ))}
       </div>
 
-      <div className="max-w-2xl space-y-3">
-        {tab === "restaurateurs"
-          ? MEMBRES.restaurateurs.map((m) => (
-              <div key={m.email} className="cut-corners-sm bg-paper p-5 shadow-[4px_4px_0_var(--color-ink)]">
-                <p className="font-semibold text-ink">{m.nom}</p>
-                <p className="text-sm text-ink/70">{m.email} · {m.resto}</p>
-              </div>
-            ))
-          : MEMBRES.gourmets.map((m) => (
-              <div key={m.email} className="cut-corners-sm bg-paper p-5 shadow-[4px_4px_0_var(--color-ink)]">
-                <p className="font-semibold text-ink">{m.nom}</p>
-                <p className="text-sm text-ink/70">{m.email} · {m.ville}</p>
-              </div>
-            ))}
-      </div>
+      {tab === "restaurateurs" ? (
+        <DataTable
+          rows={MEMBRES.restaurateurs}
+          getRowKey={(m) => m.id}
+          getRowHref={(m) => `/admin/membres/${m.id}`}
+          emptyMessage="Aucun restaurateur pour le moment."
+          columns={[
+            {
+              key: "nom",
+              label: "Nom",
+              sortValue: (m) => m.nom,
+              render: (m) => <span className="font-semibold">{m.nom}</span>,
+            },
+            { key: "email", label: "Email", render: (m) => m.email },
+            { key: "resto", label: "Restaurant", render: (m) => m.resto },
+          ]}
+        />
+      ) : (
+        <DataTable
+          rows={MEMBRES.gourmets}
+          getRowKey={(m) => m.id}
+          getRowHref={(m) => `/admin/membres/${m.id}`}
+          emptyMessage="Aucun gourmet pour le moment."
+          columns={[
+            {
+              key: "nom",
+              label: "Nom",
+              sortValue: (m) => m.nom,
+              render: (m) => <span className="font-semibold">{m.nom}</span>,
+            },
+            { key: "email", label: "Email", render: (m) => m.email },
+            { key: "ville", label: "Ville", sortValue: (m) => m.ville ?? "", render: (m) => m.ville },
+          ]}
+        />
+      )}
     </div>
   );
 }
