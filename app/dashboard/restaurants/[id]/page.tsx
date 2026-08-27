@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import PageHeader from "@/components/dashboard/PageHeader";
-import { useRestaurants } from "@/lib/restaurants-store";
+import { useRestaurant } from "@/hooks/useRestaurants";
 import FicheTab from "@/components/dashboard/FicheTab";
 import VerificationTab from "@/components/dashboard/VerificationTab";
 
@@ -17,12 +17,14 @@ const TAB_LABELS: Record<Tab, string> = {
 
 export default function RestaurantDetailPage() {
   const params = useParams<{ id: string }>();
-  const { getRestaurant } = useRestaurants();
+  const { data: restaurant, isPending, isError } = useRestaurant(params.id);
   const [tab, setTab] = useState<Tab>("fiche");
 
-  const restaurant = getRestaurant(params.id);
+  if (isPending) {
+    return <p className="text-sm text-ink/60">Chargement…</p>;
+  }
 
-  if (!restaurant) {
+  if (isError || !restaurant) {
     return (
       <div>
         <PageHeader eyebrow="MES RESTAURANTS" title="Restaurant introuvable" />
@@ -36,9 +38,9 @@ export default function RestaurantDetailPage() {
   return (
     <div>
       <PageHeader
-        eyebrow={restaurant.quartier.toUpperCase()}
-        title={restaurant.nom}
-        subtitle="Gère la fiche publique et le dossier KYB de ce restaurant."
+        eyebrow={restaurant.address.toUpperCase()}
+        title={restaurant.name}
+        subtitle="Gère la fiche publique et le dossier de vérification de ce restaurant."
       />
 
       <div className="mb-6 flex gap-2">
@@ -56,11 +58,7 @@ export default function RestaurantDetailPage() {
         ))}
       </div>
 
-      {tab === "fiche" ? (
-        <FicheTab restaurant={restaurant} />
-      ) : (
-        <VerificationTab restaurant={restaurant} />
-      )}
+      {tab === "fiche" ? <FicheTab restaurant={restaurant} /> : <VerificationTab />}
     </div>
   );
 }

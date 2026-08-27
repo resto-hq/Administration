@@ -1,34 +1,46 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import FormField from "@/components/auth/FormField";
 import StampButton from "@/components/StampButton";
-import { useRestaurants } from "@/lib/restaurants-store";
+import { useRequestReferencing } from "@/hooks/useRestaurantRequests";
+import { getApiErrorMessage } from "@/lib/api-error";
 
 export default function RestaurantForm({ submitLabel }: { submitLabel: string }) {
   const router = useRouter();
-  const { createRestaurant } = useRestaurants();
-  const [submitting, setSubmitting] = useState(false);
+  const requestReferencing = useRequestReferencing();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const nom = String(form.get("nom") ?? "").trim();
-    const quartier = String(form.get("quartier") ?? "").trim();
-    if (!nom || !quartier) return;
+    const name = String(form.get("nom") ?? "").trim();
+    const address = String(form.get("quartier") ?? "").trim();
+    if (!name || !address) return;
 
-    setSubmitting(true);
-    const restaurant = createRestaurant({ nom, quartier });
-    router.push(`/dashboard/restaurants/${restaurant.id}`);
+    requestReferencing.mutate(
+      { name, address },
+      {
+        onSuccess: (request) => {
+          router.push(`/dashboard/restaurants/requests/${request.id}`);
+        },
+      }
+    );
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
       <FormField label="Nom du restaurant" id="nom" placeholder="Chez Ama" required />
-      <FormField label="Quartier à Lomé" id="quartier" placeholder="Tokoin" required />
-      <StampButton type="submit" disabled={submitting} className="w-full">
-        {submitting ? "Création en cours…" : submitLabel}
+      <FormField label="Adresse (quartier)" id="quartier" placeholder="Tokoin, Lomé" required />
+
+      {requestReferencing.isError && (
+        <p className="text-sm font-semibold text-primary-dark">
+          {getApiErrorMessage(requestReferencing.error, "Impossible d'envoyer la demande.")}
+        </p>
+      )}
+
+      <StampButton type="submit" disabled={requestReferencing.isPending} className="w-full">
+        {requestReferencing.isPending ? "Envoi en cours…" : submitLabel}
       </StampButton>
     </form>
   );

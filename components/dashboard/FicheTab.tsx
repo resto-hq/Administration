@@ -4,29 +4,34 @@ import type { FormEvent } from "react";
 import FormField from "@/components/auth/FormField";
 import FileDrop from "@/components/dashboard/FileDrop";
 import StampButton from "@/components/StampButton";
-import { useRestaurants } from "@/lib/restaurants-store";
-import type { Restaurant } from "@/lib/mockData";
+import { useUpdateRestaurant } from "@/hooks/useRestaurants";
+import { getApiErrorMessage } from "@/lib/api-error";
+import type { components } from "@/services/api-types";
+
+type Restaurant = components["schemas"]["RestaurantRead"];
 
 export default function FicheTab({ restaurant }: { restaurant: Restaurant }) {
-  const { updateFiche } = useRestaurants();
+  const updateRestaurant = useUpdateRestaurant();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    updateFiche(restaurant.id, {
-      nom: String(form.get("fiche-nom") ?? restaurant.nom),
-      quartier: String(form.get("fiche-quartier") ?? restaurant.quartier),
-      description: String(form.get("fiche-description") ?? ""),
-      horaires: String(form.get("fiche-horaires") ?? ""),
-      specialites: String(form.get("fiche-specialites") ?? ""),
+    updateRestaurant.mutate({
+      restaurantId: restaurant.id,
+      body: {
+        name: String(form.get("fiche-nom") ?? restaurant.name),
+        address: String(form.get("fiche-quartier") ?? restaurant.address),
+        description: String(form.get("fiche-description") ?? ""),
+        concept: String(form.get("fiche-specialites") ?? ""),
+      },
     });
   }
 
   return (
     <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
       <div className="grid gap-5 sm:grid-cols-2">
-        <FormField label="Nom du restaurant" id="fiche-nom" defaultValue={restaurant.nom} />
-        <FormField label="Quartier" id="fiche-quartier" defaultValue={restaurant.quartier} />
+        <FormField label="Nom du restaurant" id="fiche-nom" defaultValue={restaurant.name} />
+        <FormField label="Adresse" id="fiche-quartier" defaultValue={restaurant.address} />
       </div>
 
       <div>
@@ -42,21 +47,29 @@ export default function FicheTab({ restaurant }: { restaurant: Restaurant }) {
         />
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2">
-        <FormField label="Horaires" id="fiche-horaires" defaultValue={restaurant.horaires ?? ""} />
-        <FormField
-          label="Spécialités"
-          id="fiche-specialites"
-          defaultValue={restaurant.specialites ?? ""}
-        />
-      </div>
+      <FormField
+        label="Spécialités / concept"
+        id="fiche-specialites"
+        defaultValue={restaurant.concept ?? ""}
+      />
 
       <div className="grid gap-4 sm:grid-cols-2">
         <FileDrop id="photo-1" label="Photo principale" />
         <FileDrop id="photo-2" label="Photo secondaire" />
       </div>
 
-      <StampButton type="submit">Enregistrer la fiche</StampButton>
+      {updateRestaurant.isError && (
+        <p className="text-sm font-semibold text-primary-dark">
+          {getApiErrorMessage(updateRestaurant.error, "Impossible d'enregistrer la fiche.")}
+        </p>
+      )}
+      {updateRestaurant.isSuccess && (
+        <p className="text-sm font-semibold text-ink/70">Fiche enregistrée.</p>
+      )}
+
+      <StampButton type="submit" disabled={updateRestaurant.isPending}>
+        {updateRestaurant.isPending ? "Enregistrement…" : "Enregistrer la fiche"}
+      </StampButton>
     </form>
   );
 }

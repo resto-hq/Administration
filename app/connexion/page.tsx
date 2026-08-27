@@ -1,20 +1,28 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AuthLayout from "@/components/auth/AuthLayout";
 import FormField from "@/components/auth/FormField";
 import StampButton from "@/components/StampButton";
+import { useLogin } from "@/hooks/useAuth";
+import { getApiErrorMessage } from "@/lib/api-error";
 
 export default function ConnexionPage() {
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
+  const login = useLogin();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitting(true);
-    setTimeout(() => router.push("/dashboard"), 700);
+    const form = new FormData(event.currentTarget);
+    login.mutate(
+      {
+        email: String(form.get("email") ?? ""),
+        password: String(form.get("password") ?? ""),
+      },
+      { onSuccess: () => router.push("/dashboard") }
+    );
   }
 
   return (
@@ -32,10 +40,22 @@ export default function ConnexionPage() {
     >
       <form onSubmit={handleSubmit} className="space-y-5">
         <FormField label="Email" id="email" type="email" placeholder="toi@resto.com" required />
-        <FormField label="Mot de passe" id="password" type="password" placeholder="••••••••" required />
+        <FormField
+          label="Mot de passe"
+          id="password"
+          type="password"
+          placeholder="••••••••"
+          required
+        />
 
-        <StampButton type="submit" disabled={submitting} className="w-full">
-          {submitting ? "Connexion…" : "Se connecter"}
+        {login.isError && (
+          <p className="text-sm font-semibold text-primary-dark">
+            {getApiErrorMessage(login.error, "Email ou mot de passe incorrect.")}
+          </p>
+        )}
+
+        <StampButton type="submit" disabled={login.isPending} className="w-full">
+          {login.isPending ? "Connexion…" : "Se connecter"}
         </StampButton>
       </form>
     </AuthLayout>

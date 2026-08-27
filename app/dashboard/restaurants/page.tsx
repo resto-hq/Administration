@@ -3,47 +3,55 @@
 import Link from "next/link";
 import PageHeader from "@/components/dashboard/PageHeader";
 import DataTable from "@/components/dashboard/DataTable";
-import StatusBadge from "@/components/admin/StatusBadge";
-import { useRestaurants } from "@/lib/restaurants-store";
+import RequestStatusBadge from "@/components/dashboard/RequestStatusBadge";
+import { useMyRequests } from "@/hooks/useRestaurantRequests";
 
 export default function MesRestaurantsPage() {
-  const { restaurants } = useRestaurants();
+  const { data: requests, isPending } = useMyRequests();
 
   return (
     <div>
       <PageHeader
         eyebrow="TES ÉTABLISSEMENTS"
         title="Mes restaurants"
-        subtitle="Gère la fiche et le dossier KYB de chacun de tes restaurants."
+        subtitle="Suis le statut de tes demandes et gère la fiche de tes restaurants validés."
       />
 
       <div className="space-y-4">
-        <DataTable
-          rows={restaurants}
-          getRowKey={(resto) => resto.id}
-          getRowHref={(resto) => `/dashboard/restaurants/${resto.id}`}
-          emptyMessage="Aucun restaurant pour le moment."
-          columns={[
-            {
-              key: "nom",
-              label: "Nom",
-              sortValue: (resto) => resto.nom,
-              render: (resto) => <span className="font-semibold">{resto.nom}</span>,
-            },
-            {
-              key: "quartier",
-              label: "Quartier",
-              sortValue: (resto) => resto.quartier,
-              render: (resto) => resto.quartier,
-            },
-            {
-              key: "statut",
-              label: "Statut",
-              sortValue: (resto) => resto.statut,
-              render: (resto) => <StatusBadge status={resto.statut} />,
-            },
-          ]}
-        />
+        {isPending ? (
+          <p className="text-sm text-ink/60">Chargement…</p>
+        ) : (
+          <DataTable
+            rows={requests ?? []}
+            getRowKey={(request) => request.id}
+            getRowHref={(request) =>
+              request.status === "approved" && request.created_restaurant_id
+                ? `/dashboard/restaurants/${request.created_restaurant_id}`
+                : `/dashboard/restaurants/requests/${request.id}`
+            }
+            emptyMessage="Aucun restaurant pour le moment."
+            columns={[
+              {
+                key: "name",
+                label: "Nom",
+                sortValue: (request) => request.name,
+                render: (request) => <span className="font-semibold">{request.name}</span>,
+              },
+              {
+                key: "address",
+                label: "Adresse",
+                sortValue: (request) => request.address,
+                render: (request) => request.address,
+              },
+              {
+                key: "status",
+                label: "Statut",
+                sortValue: (request) => request.status,
+                render: (request) => <RequestStatusBadge status={request.status} />,
+              },
+            ]}
+          />
+        )}
 
         <Link
           href="/dashboard/restaurants/nouveau"

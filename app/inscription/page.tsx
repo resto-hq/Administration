@@ -1,20 +1,32 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import AuthLayout from "@/components/auth/AuthLayout";
 import FormField from "@/components/auth/FormField";
 import StampButton from "@/components/StampButton";
+import { useRegister } from "@/hooks/useAuth";
+import { getApiErrorMessage } from "@/lib/api-error";
 
 export default function InscriptionPage() {
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
+  const register = useRegister();
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setSubmitting(true);
-    setTimeout(() => router.push("/dashboard"), 700);
+    const form = new FormData(event.currentTarget);
+    register.mutate(
+      {
+        username: String(form.get("username") ?? ""),
+        first_name: String(form.get("first_name") ?? ""),
+        last_name: String(form.get("last_name") ?? ""),
+        phone: String(form.get("phone") ?? ""),
+        email: String(form.get("email") ?? ""),
+        password: String(form.get("password") ?? ""),
+      },
+      { onSuccess: () => router.push("/dashboard") }
+    );
   }
 
   return (
@@ -31,10 +43,20 @@ export default function InscriptionPage() {
       }
     >
       <form onSubmit={handleSubmit} className="space-y-5">
-        <FormField label="Nom complet" id="nom" type="text" placeholder="Ama Kokou" required />
+        <div className="grid gap-5 sm:grid-cols-2">
+          <FormField label="Prénom" id="first_name" placeholder="Ama" required />
+          <FormField label="Nom" id="last_name" placeholder="Kokou" required />
+        </div>
+        <FormField
+          label="Nom d'utilisateur"
+          id="username"
+          placeholder="ama.kokou"
+          required
+          minLength={3}
+        />
         <FormField
           label="Numéro de téléphone"
-          id="numero"
+          id="phone"
           type="tel"
           placeholder="90 00 00 00"
           required
@@ -49,8 +71,14 @@ export default function InscriptionPage() {
           minLength={8}
         />
 
-        <StampButton type="submit" disabled={submitting} className="w-full">
-          {submitting ? "Création en cours…" : "Créer mon compte restaurateur"}
+        {register.isError && (
+          <p className="text-sm font-semibold text-primary-dark">
+            {getApiErrorMessage(register.error, "Impossible de créer le compte.")}
+          </p>
+        )}
+
+        <StampButton type="submit" disabled={register.isPending} className="w-full">
+          {register.isPending ? "Création en cours…" : "Créer mon compte restaurateur"}
         </StampButton>
       </form>
     </AuthLayout>
