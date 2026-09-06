@@ -1,23 +1,68 @@
 import { client } from "./client";
 import type { ApiJsonBody, ApiQuery, ApiResponse } from "./http-types";
 
-export async function getPendingKyc(): Promise<
-  ApiResponse<"pending_kyc_api_v1_admin_kyc_pending_get">
-> {
+// None of the endpoints below have a response_model on the backend, so their
+// shapes are typed by hand from app/schemas/kyc.py, app/schemas/user.py and
+// app/features/admin/service.py.
+
+export type KycFileInfo = { field: string; url: string | null };
+
+export type KycAdminRecord = {
+  id: string;
+  user_id: string;
+  // KYCType.BUSINESS keeps the historical wire value "restaurant".
+  kyc_type: "person" | "creator" | "restaurant";
+  status: "pending" | "approved" | "rejected";
+  first_name: string;
+  last_name: string;
+  full_address: string;
+  phone: string;
+  files: KycFileInfo[];
+  restaurant_name: string | null;
+  restaurant_address: string | null;
+  owner_name: string | null;
+  owner_phone: string | null;
+  restaurant_id: string | null;
+  rejection_reason: string | null;
+  reviewed_by: string | null;
+  submitted_at: string | null;
+  reviewed_at: string | null;
+};
+
+export type PlatformStats = {
+  total_users: number;
+  total_restaurants: number;
+  total_events: number;
+  total_reviews: number;
+  pending_kyc: number;
+};
+
+export type AdminUserRecord = {
+  id: string;
+  username: string;
+  email: string;
+  phone: string | null;
+  first_name: string;
+  last_name: string;
+  role: "user" | "creator" | "restaurateur" | "admin" | "superadmin";
+  is_active: boolean;
+  email_verified: boolean;
+  created_at: string;
+};
+
+export async function getPendingKyc(): Promise<KycAdminRecord[]> {
   const { data } = await client.get("/api/v1/admin/kyc/pending");
   return data;
 }
 
-export async function getKycDetails(
-  kycId: string
-): Promise<ApiResponse<"get_kyc_details_api_v1_admin_kyc__kyc_id__get">> {
+export async function getKycDetails(kycId: string): Promise<KycAdminRecord> {
   const { data } = await client.get(`/api/v1/admin/kyc/${kycId}`);
   return data;
 }
 
 export async function approveKyc(
   kycId: string
-): Promise<ApiResponse<"approve_kyc_api_v1_admin_kyc__kyc_id__approve_post">> {
+): Promise<{ message: string; restaurant_id?: string }> {
   const { data } = await client.post(`/api/v1/admin/kyc/${kycId}/approve`);
   return data;
 }
@@ -25,7 +70,7 @@ export async function approveKyc(
 export async function rejectKyc(
   kycId: string,
   query?: ApiQuery<"reject_kyc_api_v1_admin_kyc__kyc_id__reject_post">
-): Promise<ApiResponse<"reject_kyc_api_v1_admin_kyc__kyc_id__reject_post">> {
+): Promise<{ message: string }> {
   const { data } = await client.post(`/api/v1/admin/kyc/${kycId}/reject`, undefined, {
     params: query,
   });
@@ -53,44 +98,36 @@ export async function rejectEvent(
   return data;
 }
 
-export async function getPlatformStats(): Promise<
-  ApiResponse<"platform_stats_api_v1_admin_stats_get">
-> {
+export async function getPlatformStats(): Promise<PlatformStats> {
   const { data } = await client.get("/api/v1/admin/stats");
   return data;
 }
 
 export async function listUsers(
   query?: ApiQuery<"list_users_api_v1_admin_users_get">
-): Promise<ApiResponse<"list_users_api_v1_admin_users_get">> {
+): Promise<AdminUserRecord[]> {
   const { data } = await client.get("/api/v1/admin/users", { params: query });
   return data;
 }
 
-export async function listAdmins(): Promise<
-  ApiResponse<"list_admins_api_v1_admin_admins_get">
-> {
+export async function listAdmins(): Promise<AdminUserRecord[]> {
   const { data } = await client.get("/api/v1/admin/admins");
   return data;
 }
 
 export async function promoteToAdmin(
   body: ApiJsonBody<"promote_to_admin_api_v1_admin_admins_promote_post">
-): Promise<ApiResponse<"promote_to_admin_api_v1_admin_admins_promote_post">> {
+): Promise<{ message: string }> {
   const { data } = await client.post("/api/v1/admin/admins/promote", body);
   return data;
 }
 
-export async function demoteAdmin(
-  targetId: string
-): Promise<ApiResponse<"demote_admin_api_v1_admin_admins__target_id__demote_post">> {
+export async function demoteAdmin(targetId: string): Promise<{ message: string }> {
   const { data } = await client.post(`/api/v1/admin/admins/${targetId}/demote`);
   return data;
 }
 
-export async function deleteAdmin(
-  targetId: string
-): Promise<ApiResponse<"delete_admin_api_v1_admin_admins__target_id__delete">> {
+export async function deleteAdmin(targetId: string): Promise<{ message: string }> {
   const { data } = await client.delete(`/api/v1/admin/admins/${targetId}`);
   return data;
 }

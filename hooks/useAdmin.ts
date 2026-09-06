@@ -87,17 +87,22 @@ export function usePlatformStats() {
   });
 }
 
-export function useAdminUsers(query?: Parameters<typeof adminService.listUsers>[0]) {
+export function useAdminUsers(
+  query?: Parameters<typeof adminService.listUsers>[0],
+  options?: { enabled?: boolean }
+) {
   return useQuery({
     queryKey: queryKeys.admin.users(query),
     queryFn: () => adminService.listUsers(query),
+    enabled: options?.enabled ?? true,
   });
 }
 
-export function useAdmins() {
+export function useAdmins(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: queryKeys.admin.admins(),
     queryFn: adminService.listAdmins,
+    enabled: options?.enabled ?? true,
   });
 }
 
