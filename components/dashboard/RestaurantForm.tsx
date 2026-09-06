@@ -1,47 +1,32 @@
 "use client";
 
-import { type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import FormField from "@/components/auth/FormField";
-import StampButton from "@/components/StampButton";
-import { useRequestReferencing } from "@/hooks/useRestaurantRequests";
+import RestaurantFieldsForm from "@/components/dashboard/RestaurantFieldsForm";
+import { useCreateRestaurant } from "@/hooks/useRestaurants";
 import { getApiErrorMessage } from "@/lib/api-error";
+import { clearRestaurantDraft } from "@/lib/restaurant-draft";
 
 export default function RestaurantForm({ submitLabel }: { submitLabel: string }) {
   const router = useRouter();
-  const requestReferencing = useRequestReferencing();
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const form = new FormData(event.currentTarget);
-    const name = String(form.get("nom") ?? "").trim();
-    const address = String(form.get("quartier") ?? "").trim();
-    if (!name || !address) return;
-
-    requestReferencing.mutate(
-      { name, address },
-      {
-        onSuccess: (request) => {
-          router.push(`/dashboard/restaurants/requests/${request.id}`);
-        },
-      }
-    );
-  }
+  const createRestaurant = useCreateRestaurant();
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
-      <FormField label="Nom du restaurant" id="nom" placeholder="Chez Ama" required />
-      <FormField label="Adresse (quartier)" id="quartier" placeholder="Tokoin, Lomé" required />
-
-      {requestReferencing.isError && (
-        <p className="text-sm font-semibold text-primary-dark">
-          {getApiErrorMessage(requestReferencing.error, "Impossible d'envoyer la demande.")}
-        </p>
-      )}
-
-      <StampButton type="submit" disabled={requestReferencing.isPending} className="w-full">
-        {requestReferencing.isPending ? "Envoi en cours…" : submitLabel}
-      </StampButton>
-    </form>
+    <RestaurantFieldsForm
+      submitLabel={submitLabel}
+      pending={createRestaurant.isPending}
+      errorMessage={
+        createRestaurant.isError
+          ? getApiErrorMessage(createRestaurant.error, "Impossible de créer le restaurant.")
+          : null
+      }
+      onSubmit={(data) => {
+        createRestaurant.mutate(data, {
+          onSuccess: (restaurant) => {
+            clearRestaurantDraft();
+            router.push(`/dashboard/restaurants/${restaurant.id}`);
+          },
+        });
+      }}
+    />
   );
 }

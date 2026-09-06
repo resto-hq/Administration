@@ -1,15 +1,21 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import Sidebar from "@/components/dashboard/Sidebar";
-import EmptyRestaurantState from "@/components/dashboard/EmptyRestaurantState";
+import PersonKycIntroScreen from "@/components/dashboard/PersonKycIntroScreen";
+import PersonKycStatusModal from "@/components/dashboard/PersonKycStatusModal";
+import KycApprovedModal from "@/components/dashboard/KycApprovedModal";
 import AppShell from "@/components/dashboard/AppShell";
-import { useMyRequests } from "@/hooks/useRestaurantRequests";
+import { useKycStatus } from "@/hooks/useKyc";
+import { useMyRestaurants } from "@/hooks/useRestaurants";
+import { hasSeenKycIntro } from "@/lib/kyc-onboarding";
 
 export default function DashboardShell({ children }: { children: ReactNode }) {
-  const { data: requests, isPending } = useMyRequests();
+  const { data: kycStatus, isPending: kycPending } = useKycStatus();
+  const { data: restaurants } = useMyRestaurants();
+  const [introSkipped, setIntroSkipped] = useState(false);
 
-  if (isPending) {
+  if (kycPending) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-canvas bg-grain">
         <p className="text-sm text-ink/60">Chargement…</p>
@@ -17,13 +23,28 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
     );
   }
 
-  if (!requests || requests.length === 0) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-canvas bg-grain px-6">
-        <EmptyRestaurantState />
-      </div>
-    );
+  const personStatus = kycStatus?.person_kyc.status ?? "not_submitted";
+
+  if (personStatus === "not_submitted" && !introSkipped && !hasSeenKycIntro()) {
+    return <PersonKycIntroScreen onSkip={() => setIntroSkipped(true)} />;
   }
 
-  return <AppShell sidebar={<Sidebar />}>{children}</AppShell>;
+  // Logging in always lands on the dashboard itself — never straight into the
+  // (long) restaurant creation form. Being newly approved just adds a prompt
+  // offering to continue there, with an explicit way to postpone it.
+  const justApproved = personStatus === "approved" && (restaurants?.length ?? 0) === 0;
+
+  return (
+    <>
+      {(personStatus === "pending" || personStatus === "rejected") && (
+        <PersonKycStatusModal
+          key={personStatus}
+          status={personStatus}
+          rejectionReason={kycStatus?.person_kyc.rejection_reason}
+        />
+      )}
+      {justApproved && <KycApprovedModal />}
+      <AppShell sidebar={<Sidebar />}>{children}</AppShell>
+    </>
+  );
 }
