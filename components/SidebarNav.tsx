@@ -7,7 +7,15 @@ import type { ReactNode } from "react";
 
 export type NavItem = { href: string; label: string; icon: ReactNode };
 
-export default function SidebarNav({ items, badge }: { items: NavItem[]; badge?: string }) {
+export default function SidebarNav({
+  items,
+  badge,
+  footer,
+}: {
+  items: NavItem[];
+  badge?: string;
+  footer?: ReactNode;
+}) {
   const pathname = usePathname();
 
   return (
@@ -40,6 +48,8 @@ export default function SidebarNav({ items, badge }: { items: NavItem[]; badge?:
           );
         })}
       </nav>
+
+      {footer && <div className="mt-2 md:mt-auto md:pt-4">{footer}</div>}
     </aside>
   );
 }

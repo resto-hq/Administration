@@ -1,4 +1,5 @@
 import SidebarNav, { type NavItem } from "@/components/SidebarNav";
+import SidebarLogoutButton from "@/components/SidebarLogoutButton";
 
 const NAV_ITEMS: NavItem[] = [
   {
@@ -8,7 +9,7 @@ const NAV_ITEMS: NavItem[] = [
   },
   {
     href: "/admin/verifications",
-    label: "Vérifications KYB",
+    label: "Vérifications KYC",
     icon: (
       <path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Zm-1.5 10.5-2-2-1.4 1.4 3.4 3.4 5.4-5.4-1.4-1.4-4 4Z" />
     ),
@@ -33,5 +34,11 @@ const NAV_ITEMS: NavItem[] = [
 ];
 
 export default function Sidebar() {
-  return <SidebarNav items={NAV_ITEMS} badge="ADMIN" />;
+  return (
+    <SidebarNav
+      items={NAV_ITEMS}
+      badge="ADMIN"
+      footer={<SidebarLogoutButton redirectTo="/admin/connexion" />}
+    />
+  );
 }
