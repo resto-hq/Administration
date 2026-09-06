@@ -2,9 +2,11 @@
 
 import PageHeader from "@/components/dashboard/PageHeader";
 import DataTable from "@/components/dashboard/DataTable";
-import { AVIS } from "@/lib/mockData";
+import { useMyReviews } from "@/hooks/useReviews";
 
 export default function AvisPage() {
+  const { data: reviews, isPending, isError } = useMyReviews();
+
   return (
     <div>
       <PageHeader
@@ -13,45 +15,55 @@ export default function AvisPage() {
         subtitle="Les retours des gourmets qui sont passés dans tes restaurants."
       />
 
-      <DataTable
-        rows={AVIS}
-        getRowKey={(avis) => avis.id}
-        getRowHref={(avis) => `/dashboard/avis/${avis.id}`}
-        emptyMessage="Aucun avis pour le moment."
-        columns={[
-          {
-            key: "auteur",
-            label: "Auteur",
-            render: (avis) => <span className="font-semibold">{avis.auteur}</span>,
-          },
-          {
-            key: "note",
-            label: "Note",
-            sortValue: (avis) => avis.note,
-            render: (avis) => (
-              <span className="text-primary-dark">
-                {"★".repeat(avis.note)}
-                {"☆".repeat(5 - avis.note)}
-              </span>
-            ),
-          },
-          {
-            key: "texte",
-            label: "Avis",
-            render: (avis) => (
-              <span className="text-ink/70">
-                {avis.texte.length > 60 ? `${avis.texte.slice(0, 60)}…` : avis.texte}
-              </span>
-            ),
-          },
-          {
-            key: "resto",
-            label: "Restaurant",
-            sortValue: (avis) => avis.restoNom,
-            render: (avis) => avis.restoNom,
-          },
-        ]}
-      />
+      {isError && (
+        <p className="mb-4 text-sm font-semibold text-primary-dark">
+          Impossible de charger les avis.
+        </p>
+      )}
+
+      {isPending ? (
+        <p className="text-sm text-ink/60">Chargement…</p>
+      ) : (
+        <DataTable
+          rows={reviews}
+          getRowKey={(avis) => avis.id}
+          getRowHref={(avis) => `/dashboard/avis/${avis.id}`}
+          emptyMessage="Aucun avis pour le moment."
+          columns={[
+            {
+              key: "restaurant_name",
+              label: "Restaurant",
+              sortValue: (avis) => avis.restaurant_name,
+              render: (avis) => <span className="font-semibold">{avis.restaurant_name}</span>,
+            },
+            {
+              key: "rating",
+              label: "Note",
+              sortValue: (avis) => avis.rating,
+              render: (avis) => (
+                <span className="text-primary-dark">
+                  {"★".repeat(Math.round(avis.rating))}
+                  {"☆".repeat(5 - Math.round(avis.rating))}
+                </span>
+              ),
+            },
+            {
+              key: "text",
+              label: "Avis",
+              render: (avis) => (
+                <span className="text-ink/70">
+                  {avis.text.length > 60 ? `${avis.text.slice(0, 60)}…` : avis.text}
+                </span>
+              ),
+            },
+            {
+              key: "restaurant_response",
+              label: "Réponse",
+              render: (avis) => (avis.restaurant_response ? "Oui" : "—"),
+            },
+          ]}
+        />
+      )}
     </div>
   );
 }

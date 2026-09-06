@@ -1,6 +1,35 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
 import * as reviewsService from "@/services/reviews";
+import { useMyRestaurants } from "./useRestaurants";
 import { queryKeys } from "./query-keys";
+
+/**
+ * All reviews across every published restaurant the caller owns. There is no
+ * "my reviews" endpoint — reviews are only fetchable per restaurant — so this
+ * fans out one query per published restaurant and flattens the results.
+ */
+export function useMyReviews() {
+  const { data: restaurants, isPending: restaurantsPending } = useMyRestaurants();
+  const published = (restaurants ?? []).filter((restaurant) => restaurant.status === "published");
+
+  const reviewQueries = useQueries({
+    queries: published.map((restaurant) => ({
+      queryKey: queryKeys.reviews.byRestaurant(restaurant.id),
+      queryFn: () => reviewsService.getRestaurantReviews(restaurant.id),
+    })),
+  });
+
+  const isPending = restaurantsPending || reviewQueries.some((query) => query.isPending);
+  const isError = reviewQueries.some((query) => query.isError);
+  const reviews = published.flatMap((restaurant, index) =>
+    (reviewQueries[index]?.data ?? []).map((review) => ({
+      ...review,
+      restaurant_name: restaurant.name,
+    }))
+  );
+
+  return { data: reviews, isPending, isError };
+}
 
 export function useRestaurantReviews(restaurantId: string, options?: { enabled?: boolean }) {
   return useQuery({

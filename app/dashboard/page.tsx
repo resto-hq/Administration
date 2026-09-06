@@ -4,22 +4,25 @@ import Link from "next/link";
 import { useQueries } from "@tanstack/react-query";
 import PageHeader from "@/components/dashboard/PageHeader";
 import StatCard from "@/components/dashboard/StatCard";
-import { AVIS, RESERVATIONS } from "@/lib/mockData";
-import { useMyRequests } from "@/hooks/useRestaurantRequests";
+import { useMyRestaurants } from "@/hooks/useRestaurants";
+import { useMyReviews } from "@/hooks/useReviews";
 import * as eventsService from "@/services/events";
 import { queryKeys } from "@/hooks/query-keys";
 
 export default function DashboardOverviewPage() {
-  const { data: requests } = useMyRequests();
+  const { data: restaurants } = useMyRestaurants();
+  const { data: reviews } = useMyReviews();
 
-  const approvedRestaurantIds = (requests ?? [])
-    .filter((request) => request.status === "approved" && request.created_restaurant_id)
-    .map((request) => request.created_restaurant_id as string);
+  const publishedRestaurantIds = (restaurants ?? [])
+    .filter((restaurant) => restaurant.status === "published")
+    .map((restaurant) => restaurant.id);
 
-  const aVerifier = (requests ?? []).filter((request) => request.status !== "approved").length;
+  const aVerifier = (restaurants ?? []).filter(
+    (restaurant) => restaurant.status !== "published"
+  ).length;
 
   const eventsQueries = useQueries({
-    queries: approvedRestaurantIds.map((restaurantId) => ({
+    queries: publishedRestaurantIds.map((restaurantId) => ({
       queryKey: queryKeys.events.list({ restaurant_id: restaurantId }),
       queryFn: () => eventsService.listEvents({ restaurant_id: restaurantId }),
     })),
@@ -41,11 +44,10 @@ export default function DashboardOverviewPage() {
         >
           <div>
             <p className="text-stamp text-ink">
-              {aVerifier} demande{aVerifier > 1 ? "s" : ""} en attente de validation
+              {aVerifier} restaurant{aVerifier > 1 ? "s" : ""} à finaliser côté vérification
             </p>
             <p className="mt-1 text-sm text-ink/70">
-              Suis le statut de tes demandes de référencement pour qu&apos;elles apparaissent
-              publiquement sur Resto.
+              Termine leur dossier pour qu&apos;ils apparaissent publiquement sur Resto.
             </p>
           </div>
           <span className="cut-corners-sm shrink-0 bg-ink px-4 py-2 text-sm font-semibold text-paper">
@@ -56,8 +58,8 @@ export default function DashboardOverviewPage() {
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         <StatCard label="Visites de tes fiches" value="0" hint="depuis l'inscription" />
-        <StatCard label="Avis reçus" value={String(AVIS.length)} />
-        <StatCard label="Réservations" value={String(RESERVATIONS.length)} />
+        <StatCard label="Avis reçus" value={String(reviews.length)} />
+        <StatCard label="Restaurants publiés" value={String(publishedRestaurantIds.length)} />
         <StatCard label="Événements publiés" value={String(eventsCount)} />
       </div>
     </div>

@@ -1,29 +1,84 @@
-import { notFound } from "next/navigation";
+"use client";
+
+import { useState, type FormEvent } from "react";
+import { useParams } from "next/navigation";
 import PageHeader from "@/components/dashboard/PageHeader";
 import BackLink from "@/components/dashboard/BackLink";
-import { AVIS } from "@/lib/mockData";
+import StampButton from "@/components/StampButton";
+import { useMyReviews, useRespondToReview } from "@/hooks/useReviews";
+import { getApiErrorMessage } from "@/lib/api-error";
 
-export default async function AvisDetailPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const avis = AVIS.find((a) => a.id === id);
-  if (!avis) notFound();
+export default function AvisDetailPage() {
+  const params = useParams<{ id: string }>();
+  const { data: reviews, isPending } = useMyReviews();
+  const respondToReview = useRespondToReview();
+  const [response, setResponse] = useState("");
+
+  const avis = reviews.find((r) => r.id === params.id);
+
+  if (isPending) {
+    return <p className="text-sm text-ink/60">Chargement…</p>;
+  }
+
+  if (!avis) {
+    return (
+      <div>
+        <BackLink href="/dashboard/avis" label="Retour aux avis" />
+        <PageHeader eyebrow="RÉPUTATION" title="Avis introuvable" />
+      </div>
+    );
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!avis) return;
+    respondToReview.mutate({ reviewId: avis.id, body: { response } });
+  }
 
   return (
     <div>
       <BackLink href="/dashboard/avis" label="Retour aux avis" />
-      <PageHeader eyebrow={avis.restoNom.toUpperCase()} title={avis.auteur} />
+      <PageHeader eyebrow={avis.restaurant_name.toUpperCase()} title={`Avis`} />
 
-      <div className="cut-corners-sm max-w-xl bg-paper p-6 shadow-[4px_4px_0_var(--color-ink)]">
+      <div className="cut-corners-sm max-w-xl space-y-4 bg-paper p-6 shadow-[4px_4px_0_var(--color-ink)]">
         <p className="text-lg text-primary-dark">
-          {"★".repeat(avis.note)}
-          {"☆".repeat(5 - avis.note)}
+          {"★".repeat(Math.round(avis.rating))}
+          {"☆".repeat(5 - Math.round(avis.rating))}
         </p>
-        <p className="mt-4 text-ink/80">{avis.texte}</p>
-        <p className="mt-4 text-xs font-semibold tracking-wide text-ink/50">{avis.restoNom}</p>
+        <p className="text-ink/80">{avis.text}</p>
+        <p className="text-xs font-semibold tracking-wide text-ink/50">
+          {new Date(avis.created_at).toLocaleDateString("fr-FR")}
+        </p>
+
+        {avis.restaurant_response ? (
+          <div className="cut-corners-sm bg-paper-alt p-4">
+            <p className="text-xs font-semibold tracking-wide text-ink/50">Ta réponse</p>
+            <p className="mt-1 text-ink/80">{avis.restaurant_response}</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-3 border-t border-ink/10 pt-4">
+            <label htmlFor="response" className="block text-sm font-semibold text-ink">
+              Répondre à cet avis
+            </label>
+            <textarea
+              id="response"
+              rows={3}
+              value={response}
+              onChange={(event) => setResponse(event.target.value)}
+              required
+              maxLength={1000}
+              className="cut-corners-sm w-full border border-ink/15 bg-paper-alt px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/40"
+            />
+            {respondToReview.isError && (
+              <p className="text-sm font-semibold text-primary-dark">
+                {getApiErrorMessage(respondToReview.error, "Impossible d'envoyer la réponse.")}
+              </p>
+            )}
+            <StampButton type="submit" disabled={respondToReview.isPending}>
+              {respondToReview.isPending ? "Envoi…" : "Répondre"}
+            </StampButton>
+          </form>
+        )}
       </div>
     </div>
   );
