@@ -16,14 +16,14 @@ export type ApiResponse<Op extends OperationId> = operations[Op]["responses"] ex
 
 /** JSON request body for a given operation. */
 export type ApiJsonBody<Op extends OperationId> = operations[Op] extends {
-  requestBody: { content: { "application/json": infer B } };
+  requestBody?: { content: { "application/json": infer B } };
 }
   ? B
   : never;
 
 /** multipart/form-data request body for a given operation (file uploads). */
 export type ApiFormBody<Op extends OperationId> = operations[Op] extends {
-  requestBody: { content: { "multipart/form-data": infer B } };
+  requestBody?: { content: { "multipart/form-data": infer B } };
 }
   ? B
   : never;

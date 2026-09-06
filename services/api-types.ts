@@ -436,6 +436,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/restaurants/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * My Restaurants
+         * @description Every fiche the caller owns, including drafts and fiches under review.
+         */
+        get: operations["my_restaurants_api_v1_restaurants_mine_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/restaurants/{restaurant_id}": {
         parameters: {
             query?: never;
@@ -837,6 +857,28 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/kyc/person": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Submit Kyc Person
+         * @description Step 0: verify the submitter's own identity.
+         *
+         *     Must be approved before a creator or restaurant application is accepted.
+         */
+        post: operations["submit_kyc_person_api_v1_kyc_person_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/kyc/creator": {
         parameters: {
             query?: never;
@@ -863,7 +905,15 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Submit Kyc Restaurant */
+        /**
+         * Submit Kyc Restaurant
+         * @deprecated
+         * @description Deprecated - use POST /api/v1/kyb/restaurant.
+         *
+         *     Declares the restaurant inline instead of drafting the fiche first. It now
+         *     opens (or reuses) a draft fiche from `restaurant_name`/`restaurant_address`
+         *     and runs the same KYB against it.
+         */
         post: operations["submit_kyc_restaurant_api_v1_kyc_restaurant_post"];
         delete?: never;
         options?: never;
@@ -882,6 +932,30 @@ export interface paths {
         get: operations["get_kyc_status_api_v1_kyc_status_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/kyb/restaurant": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Submit Kyb Restaurant
+         * @description Step 2: verify the establishment behind a draft fiche.
+         *
+         *     The fiche is drafted first (step 1, POST /api/v1/restaurants), so this
+         *     carries only the business documents and points at `restaurant_id`.
+         *     Submitting moves the fiche to `pending` review.
+         */
+        post: operations["submit_kyb_restaurant_api_v1_kyb_restaurant_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1274,8 +1348,52 @@ export interface components {
             /** Language */
             language?: ("fr" | "en") | null;
         };
+        /** Body_submit_kyb_restaurant_api_v1_kyb_restaurant_post */
+        Body_submit_kyb_restaurant_api_v1_kyb_restaurant_post: {
+            /** Restaurant Id */
+            restaurant_id: string;
+            /** First Name */
+            first_name?: string | null;
+            /** Last Name */
+            last_name?: string | null;
+            /** Full Address */
+            full_address?: string | null;
+            /** Phone */
+            phone?: string | null;
+            /** Owner Name */
+            owner_name?: string | null;
+            /** Owner Phone */
+            owner_phone?: string | null;
+            /** Passport */
+            passport?: string | null;
+            /** Id Card */
+            id_card?: string | null;
+            /** Proof Of Ownership */
+            proof_of_ownership?: string | null;
+            /** Cfe Document */
+            cfe_document?: string | null;
+            /** Proof Of Employment */
+            proof_of_employment?: string | null;
+            /** Owner Photo */
+            owner_photo?: string | null;
+        };
         /** Body_submit_kyc_creator_api_v1_kyc_creator_post */
         Body_submit_kyc_creator_api_v1_kyc_creator_post: {
+            /** First Name */
+            first_name?: string | null;
+            /** Last Name */
+            last_name?: string | null;
+            /** Full Address */
+            full_address?: string | null;
+            /** Phone */
+            phone?: string | null;
+            /** Passport */
+            passport?: string | null;
+            /** Id Card */
+            id_card?: string | null;
+        };
+        /** Body_submit_kyc_person_api_v1_kyc_person_post */
+        Body_submit_kyc_person_api_v1_kyc_person_post: {
             /** First Name */
             first_name?: string | null;
             /** Last Name */
@@ -1940,6 +2058,11 @@ export interface components {
             booking_integrations: string[];
             /** Is Verified */
             is_verified: boolean;
+            status: components["schemas"]["RestaurantStatus"];
+            /** Rejection Reason */
+            rejection_reason?: string | null;
+            /** Published At */
+            published_at?: string | null;
             completion?: components["schemas"]["RestaurantCompletion"];
             stats: components["schemas"]["RestaurantStats"];
             /**
@@ -2070,6 +2193,17 @@ export interface components {
              */
             favorites: number;
         };
+        /**
+         * RestaurantStatus
+         * @description Publication state of a fiche (section 6.4).
+         *
+         *     The owner fills the complete fiche as a DRAFT, submits it for review with
+         *     the restaurant KYB, and it only becomes publicly visible once an admin
+         *     approves. Existing documents predate this field, so the default is
+         *     PUBLISHED - a fiche already live must not disappear on upgrade.
+         * @enum {string}
+         */
+        RestaurantStatus: "draft" | "pending" | "published" | "rejected";
         /** RestaurantUpdate */
         RestaurantUpdate: {
             /** Name */
@@ -2354,6 +2488,11 @@ export interface components {
             role: components["schemas"]["UserRole"];
             /** Score */
             score: number;
+            /**
+             * Is Kyc Person
+             * @default false
+             */
+            is_kyc_person: boolean;
             /** Is Kyc Creator */
             is_kyc_creator: boolean;
             /** Is Kyc Restaurant */
@@ -3504,6 +3643,37 @@ export interface operations {
             };
         };
     };
+    my_restaurants_api_v1_restaurants_mine_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_restaurant_api_v1_restaurants__restaurant_id__get: {
         parameters: {
             query?: never;
@@ -4639,6 +4809,41 @@ export interface operations {
             };
         };
     };
+    submit_kyc_person_api_v1_kyc_person_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_submit_kyc_person_api_v1_kyc_person_post"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     submit_kyc_creator_api_v1_kyc_creator_post: {
         parameters: {
             query?: never;
@@ -4719,6 +4924,41 @@ export interface operations {
             };
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    submit_kyb_restaurant_api_v1_kyb_restaurant_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": components["schemas"]["Body_submit_kyb_restaurant_api_v1_kyb_restaurant_post"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {

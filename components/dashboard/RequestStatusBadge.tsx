@@ -1,13 +1,17 @@
 const STYLES: Record<string, string> = {
+  draft: "bg-ink/10 text-ink/60",
   pending: "bg-mustard/40 text-ink",
   approved: "bg-ink text-paper",
+  published: "bg-ink text-paper",
   rejected: "bg-primary/15 text-primary-dark",
   ended: "bg-ink/10 text-ink/60",
 };
 
 const LABELS: Record<string, string> = {
+  draft: "brouillon",
   pending: "en attente",
   approved: "validé",
+  published: "publié",
   rejected: "rejeté",
   ended: "terminé",
 };

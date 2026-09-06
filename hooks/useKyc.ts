@@ -9,22 +9,33 @@ export function useKycStatus() {
   });
 }
 
-export function useSubmitKycCreator() {
+export function useSubmitPersonKyc() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: kycService.submitKycCreator,
+    mutationFn: kycService.submitPersonKyc,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.kyc.status() });
     },
   });
 }
 
-export function useSubmitKycRestaurant() {
+export function useSubmitCreatorKyc() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: kycService.submitKycRestaurant,
+    mutationFn: kycService.submitCreatorKyc,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.kyc.status() });
+    },
+  });
+}
+
+export function useSubmitKybRestaurant() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: kycService.submitKybRestaurant,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.kyc.status() });
+      queryClient.invalidateQueries({ queryKey: queryKeys.restaurants.mine() });
     },
   });
 }

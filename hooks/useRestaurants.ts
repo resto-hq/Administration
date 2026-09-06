@@ -8,6 +8,13 @@ function invalidateAllRestaurants(queryClient: QueryClient) {
   return queryClient.invalidateQueries({ queryKey: ["restaurants"] });
 }
 
+export function useMyRestaurants() {
+  return useQuery({
+    queryKey: queryKeys.restaurants.mine(),
+    queryFn: restaurantsService.listOwnRestaurants,
+  });
+}
+
 export function useRestaurantsList(
   query?: Parameters<typeof restaurantsService.listRestaurants>[0]
 ) {

@@ -1,5 +1,36 @@
 import { client } from "./client";
 import type { ApiJsonBody, ApiQuery, ApiResponse } from "./http-types";
+import type { components } from "./api-types";
+
+/** GET /restaurants/mine has no response_model on the backend, typed by hand. */
+export type MyRestaurant = Pick<
+  components["schemas"]["RestaurantCard"],
+  | "id"
+  | "name"
+  | "logo"
+  | "photos"
+  | "cover_photo"
+  | "restaurant_types"
+  | "cuisine_types"
+  | "price_range"
+  | "address"
+  | "coordinates"
+  | "delivery_available"
+  | "takeaway_available"
+  | "is_verified"
+  | "average_rating"
+  | "review_count"
+> & {
+  status: components["schemas"]["RestaurantStatus"];
+  rejection_reason: string | null;
+  completion: components["schemas"]["RestaurantCompletion"];
+};
+
+/** Every fiche the caller owns, whatever its publication state (draft included). */
+export async function listOwnRestaurants(): Promise<MyRestaurant[]> {
+  const { data } = await client.get("/api/v1/restaurants/mine");
+  return data;
+}
 
 export async function listRestaurants(
   query?: ApiQuery<"list_restaurants_api_v1_restaurants_get">

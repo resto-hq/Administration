@@ -24,6 +24,7 @@ export const queryKeys = {
     mostSearched: (query?: unknown) => ["restaurants", "most-searched", query ?? {}] as const,
     cheapest: (query?: unknown) => ["restaurants", "cheapest", query ?? {}] as const,
     detail: (restaurantId: string) => ["restaurants", "detail", restaurantId] as const,
+    mine: () => ["restaurants", "mine"] as const,
   },
   events: {
     list: (query?: unknown) => ["events", "list", query ?? {}] as const,

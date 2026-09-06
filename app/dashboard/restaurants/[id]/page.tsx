@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 import PageHeader from "@/components/dashboard/PageHeader";
+import RequestStatusBadge from "@/components/dashboard/RequestStatusBadge";
 import { useRestaurant } from "@/hooks/useRestaurants";
 import FicheTab from "@/components/dashboard/FicheTab";
 import VerificationTab from "@/components/dashboard/VerificationTab";
@@ -37,11 +38,14 @@ export default function RestaurantDetailPage() {
 
   return (
     <div>
-      <PageHeader
-        eyebrow={restaurant.address.toUpperCase()}
-        title={restaurant.name}
-        subtitle="Gère la fiche publique et le dossier de vérification de ce restaurant."
-      />
+      <div className="mb-8 flex flex-wrap items-start justify-between gap-3">
+        <PageHeader
+          eyebrow={restaurant.address.toUpperCase()}
+          title={restaurant.name}
+          subtitle="Gère la fiche publique et le dossier de vérification de ce restaurant."
+        />
+        <RequestStatusBadge status={restaurant.status} />
+      </div>
 
       <div className="mb-6 flex gap-2">
         {TABS.map((key) => (
@@ -58,7 +62,11 @@ export default function RestaurantDetailPage() {
         ))}
       </div>
 
-      {tab === "fiche" ? <FicheTab restaurant={restaurant} /> : <VerificationTab />}
+      {tab === "fiche" ? (
+        <FicheTab restaurant={restaurant} />
+      ) : (
+        <VerificationTab restaurant={restaurant} />
+      )}
     </div>
   );
 }
