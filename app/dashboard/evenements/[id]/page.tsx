@@ -6,6 +6,7 @@ import BackLink from "@/components/dashboard/BackLink";
 import StampButton from "@/components/StampButton";
 import RequestStatusBadge from "@/components/dashboard/RequestStatusBadge";
 import { useEvent, useDeleteEvent } from "@/hooks/useEvents";
+import { useConfirmDialog } from "@/hooks/useConfirmDialog";
 import { getApiErrorMessage } from "@/lib/api-error";
 
 export default function EvenementDetailPage() {
@@ -13,6 +14,7 @@ export default function EvenementDetailPage() {
   const router = useRouter();
   const { data: evenement, isPending, isError } = useEvent(params.id);
   const deleteEvent = useDeleteEvent();
+  const { confirm, dialog } = useConfirmDialog();
 
   if (isPending) {
     return <p className="text-sm text-ink/60">Chargement…</p>;
@@ -64,14 +66,23 @@ export default function EvenementDetailPage() {
         variant="ink"
         className="mt-6"
         disabled={deleteEvent.isPending}
-        onClick={() => {
-          deleteEvent.mutate(evenement.id, {
-            onSuccess: () => router.push("/dashboard/evenements"),
-          });
-        }}
+        onClick={() =>
+          confirm({
+            title: "Supprimer cet événement ?",
+            message: "Cette action est irréversible.",
+            confirmLabel: "Supprimer",
+            danger: true,
+            onConfirm: () => {
+              deleteEvent.mutate(evenement.id, {
+                onSuccess: () => router.push("/dashboard/evenements"),
+              });
+            },
+          })
+        }
       >
         {deleteEvent.isPending ? "Suppression…" : "Supprimer cet événement"}
       </StampButton>
+      {dialog}
     </div>
   );
 }
