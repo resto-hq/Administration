@@ -3,8 +3,9 @@
 import { useState } from "react";
 import PageHeader from "@/components/dashboard/PageHeader";
 import DataTable from "@/components/dashboard/DataTable";
+import RequestStatusBadge from "@/components/dashboard/RequestStatusBadge";
 import { useAdminUsers } from "@/hooks/useAdmin";
-import type { AdminUserRecord } from "@/services/admin";
+import type { AdminUserResponse } from "@/services/admin";
 
 const TABS = [
   { key: "user", label: "Utilisateurs" },
@@ -17,19 +18,21 @@ const COLUMNS = [
   {
     key: "name",
     label: "Nom",
-    sortValue: (m: AdminUserRecord) => `${m.first_name} ${m.last_name}`,
-    render: (m: AdminUserRecord) => (
+    sortValue: (m: AdminUserResponse) => `${m.first_name} ${m.last_name}`,
+    render: (m: AdminUserResponse) => (
       <span className="font-semibold">
         {m.first_name} {m.last_name}
       </span>
     ),
   },
-  { key: "email", label: "Email", render: (m: AdminUserRecord) => m.email },
-  { key: "role", label: "Rôle", render: (m: AdminUserRecord) => m.role },
+  { key: "email", label: "Email", render: (m: AdminUserResponse) => m.email },
+  { key: "role", label: "Rôle", render: (m: AdminUserResponse) => m.role },
   {
     key: "is_active",
-    label: "Actif",
-    render: (m: AdminUserRecord) => (m.is_active ? "Oui" : "Non"),
+    label: "Statut",
+    render: (m: AdminUserResponse) => (
+      <RequestStatusBadge status={m.is_active ? "active" : "suspended"} />
+    ),
   },
 ];
 
@@ -57,8 +60,8 @@ export default function AdminMembresPage() {
             key={key}
             type="button"
             onClick={() => setTab(key)}
-            className={`cut-corners-sm px-4 py-2 text-sm font-semibold transition-colors ${
-              tab === key ? "bg-primary text-paper" : "bg-paper-alt text-ink/60 hover:text-ink"
+            className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
+              tab === key ? "bg-primary text-white" : "border border-border bg-panel text-ink/60 hover:text-ink"
             }`}
           >
             {label}
@@ -75,7 +78,7 @@ export default function AdminMembresPage() {
       {isPending ? (
         <p className="text-sm text-ink/60">Chargement…</p>
       ) : (
-        <DataTable<AdminUserRecord>
+        <DataTable<AdminUserResponse>
           rows={rows}
           getRowKey={(m) => m.id}
           getRowHref={(m) => `/admin/membres/${m.id}`}

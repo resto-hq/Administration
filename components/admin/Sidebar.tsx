@@ -31,6 +31,27 @@ const NAV_ITEMS: NavItem[] = [
     label: "Événements",
     icon: <path d="M4 11a8 8 0 0 1 14-5l2 2-3 3-2-2a4 4 0 0 0-7 2l-1 3-3-1 0-2Zm0 0-2 6 6-2" />,
   },
+  {
+    href: "/admin/signalements",
+    label: "Signalements",
+    icon: (
+      <path d="M12 9v4m0 4h.01M10.3 3.9 2.7 17a2 2 0 0 0 1.7 3h15.2a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+    ),
+  },
+  {
+    href: "/admin/audit",
+    label: "Journal d'audit",
+    icon: (
+      <path d="M9 3h6a2 2 0 0 1 2 2v14l-5-3-5 3V5a2 2 0 0 1 2-2Zm0 5h6m-6 4h6" />
+    ),
+  },
+  {
+    href: "/admin/statistiques",
+    label: "Statistiques",
+    icon: (
+      <path d="M4 20V10m6 10V4m6 16v-7m6 7V8" />
+    ),
+  },
 ];
 
 export default function Sidebar() {

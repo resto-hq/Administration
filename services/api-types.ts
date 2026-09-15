@@ -649,6 +649,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/events/{event_id}/ticket-link/click": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Record Ticket Link Click */
+        post: operations["record_ticket_link_click_api_v1_events__event_id__ticket_link_click_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events/{event_id}/photos": {
         parameters: {
             query?: never;
@@ -748,6 +765,23 @@ export interface paths {
         put?: never;
         /** Respond To Review */
         post: operations["respond_to_review_api_v1_reviews__review_id__respond_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Report */
+        post: operations["create_report_api_v1_reports_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1047,6 +1081,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Events */
+        get: operations["list_events_api_v1_admin_events_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/events/{event_id}/approve": {
         parameters: {
             query?: never;
@@ -1098,6 +1149,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard */
+        get: operations["dashboard_api_v1_admin_dashboard_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/users": {
         parameters: {
             query?: never;
@@ -1107,6 +1175,109 @@ export interface paths {
         };
         /** List Users */
         get: operations["list_users_api_v1_admin_users_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}/activity": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** User Activity */
+        get: operations["user_activity_api_v1_admin_users__user_id__activity_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get User */
+        get: operations["get_user_api_v1_admin_users__user_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update User */
+        patch: operations["update_user_api_v1_admin_users__user_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/admin/users/{user_id}/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update User Role */
+        patch: operations["update_user_role_api_v1_admin_users__user_id__role_patch"];
+        trace?: never;
+    };
+    "/api/v1/admin/restaurants": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Restaurants */
+        get: operations["list_restaurants_api_v1_admin_restaurants_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/restaurants/{restaurant_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Restaurant */
+        patch: operations["update_restaurant_api_v1_admin_restaurants__restaurant_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/admin/audit-logs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Audit Logs */
+        get: operations["list_audit_logs_api_v1_admin_audit_logs_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1178,6 +1349,91 @@ export interface paths {
         post?: never;
         /** Delete Admin */
         delete: operations["delete_admin_api_v1_admin_admins__target_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Reports */
+        get: operations["list_reports_api_v1_admin_reports_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/{report_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Report */
+        get: operations["get_report_api_v1_admin_reports__report_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/{report_id}/resolve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resolve Report */
+        post: operations["resolve_report_api_v1_admin_reports__report_id__resolve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/{report_id}/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dismiss Report */
+        post: operations["dismiss_report_api_v1_admin_reports__report_id__dismiss_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reports/{report_id}/moderate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Moderate Report Content */
+        post: operations["moderate_report_content_api_v1_admin_reports__report_id__moderate_post"];
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1347,6 +1603,220 @@ export interface components {
             screen_reader_optimized?: boolean | null;
             /** Language */
             language?: ("fr" | "en") | null;
+        };
+        /**
+         * AdminRestaurantRead
+         * @description Full fiche payload with fields only staff should see.
+         */
+        AdminRestaurantRead: {
+            id: string;
+            /** Name */
+            name: string;
+            /** Logo */
+            logo?: string | null;
+            /** Photos */
+            photos: string[];
+            /** Menu Photos */
+            menu_photos: string[];
+            /** Address */
+            address: string;
+            coordinates: components["schemas"]["CoordinatesOut"];
+            opening_hours: components["schemas"]["OpeningHoursOut"];
+            /** Phone Numbers */
+            phone_numbers: string[];
+            /** Email */
+            email?: string | null;
+            /** Website */
+            website?: string | null;
+            /** Description */
+            description?: string | null;
+            /** Restaurant Types */
+            restaurant_types: string[];
+            /** Cuisine Types */
+            cuisine_types: string[];
+            /** Concept */
+            concept?: string | null;
+            /** Signature Dishes */
+            signature_dishes: string[];
+            /** Menu Items */
+            menu_items: string[];
+            /** Suggested Starters */
+            suggested_starters: string[];
+            price_range: components["schemas"]["PriceRange"];
+            /** Promotions */
+            promotions: string[];
+            /** Delivery Available */
+            delivery_available: boolean;
+            /** Takeaway Available */
+            takeaway_available: boolean;
+            services: components["schemas"]["RestaurantServices"];
+            payment_methods: components["schemas"]["PaymentMethods"];
+            /** Average Rating */
+            average_rating?: number | null;
+            /** Review Count */
+            review_count: number;
+            /** Events */
+            events?: components["schemas"]["RestaurantEventSummary"][];
+            /** Workshops */
+            workshops?: components["schemas"]["RestaurantEventSummary"][];
+            /** Environmental Commitments */
+            environmental_commitments: string[];
+            /** Community Commitments */
+            community_commitments: string[];
+            /** Loyalty Programs */
+            loyalty_programs: string[];
+            /** Seating Capacity */
+            seating_capacity?: number | null;
+            /** Cancellation Policy */
+            cancellation_policy?: string | null;
+            /** House Rules */
+            house_rules?: string | null;
+            /** Architectural Features */
+            architectural_features?: string | null;
+            /** Health Certifications */
+            health_certifications: string[];
+            social_links: components["schemas"]["SocialLinksOut"];
+            /** Contact Form Enabled */
+            contact_form_enabled: boolean;
+            /** Newsletter Enabled */
+            newsletter_enabled: boolean;
+            /** Booking Integrations */
+            booking_integrations: string[];
+            /** Is Verified */
+            is_verified: boolean;
+            status: components["schemas"]["RestaurantStatus"];
+            /** Rejection Reason */
+            rejection_reason?: string | null;
+            /** Published At */
+            published_at?: string | null;
+            completion?: components["schemas"]["RestaurantCompletion"];
+            stats: components["schemas"]["RestaurantStats"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Owner Id */
+            owner_id: string;
+            /** Is Active */
+            is_active: boolean;
+            /** Submitted At */
+            submitted_at?: string | null;
+            /** Updated At */
+            updated_at?: string | null;
+        };
+        /** AdminRestaurantUpdate */
+        AdminRestaurantUpdate: {
+            /** Is Active */
+            is_active: boolean;
+            /** Reason */
+            reason?: string | null;
+        };
+        /** AdminUserResponse */
+        AdminUserResponse: {
+            id: string;
+            /** Username */
+            username: string;
+            /** Email */
+            email: string;
+            /** Phone */
+            phone?: string | null;
+            /** First Name */
+            first_name: string;
+            /** Last Name */
+            last_name: string;
+            role: components["schemas"]["UserRole"];
+            /**
+             * Score
+             * @default 0
+             */
+            score: number;
+            /** Referral Code */
+            referral_code?: string | null;
+            /**
+             * Is Kyc Person
+             * @default false
+             */
+            is_kyc_person: boolean;
+            /**
+             * Is Kyc Creator
+             * @default false
+             */
+            is_kyc_creator: boolean;
+            /**
+             * Is Kyc Restaurant
+             * @default false
+             */
+            is_kyc_restaurant: boolean;
+            /** Is Active */
+            is_active: boolean;
+            /** Suspension Reason */
+            suspension_reason?: string | null;
+            /** Suspended At */
+            suspended_at?: string | null;
+            /** Suspended By */
+            suspended_by?: string | null;
+            /** Email Verified */
+            email_verified: boolean;
+            /** Last Login At */
+            last_login_at?: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Updated At */
+            updated_at?: string | null;
+        };
+        /**
+         * AdminUserRoleUpdate
+         * @description A superadmin assigns a scoped staff role or returns a user to a role.
+         */
+        AdminUserRoleUpdate: {
+            role: components["schemas"]["UserRole"];
+        };
+        /**
+         * AdminUserUpdate
+         * @description Fields a staff member may change on another account.
+         *
+         *     A suspension is intentionally a reversible state change.  The service
+         *     requires a reason whenever ``is_active`` becomes false, and records it in
+         *     the audit trail as well as on the target account.
+         */
+        AdminUserUpdate: {
+            /** Is Active */
+            is_active?: boolean | null;
+            /** Reason */
+            reason?: string | null;
+        };
+        /** AuditLogRead */
+        AuditLogRead: {
+            id: string;
+            /** Actor Id */
+            actor_id: string;
+            /** Action */
+            action: string;
+            /** Target Type */
+            target_type: string;
+            /** Target Id */
+            target_id: string;
+            /** Before */
+            before: {
+                [key: string]: unknown;
+            };
+            /** After */
+            after: {
+                [key: string]: unknown;
+            };
+            /** Metadata */
+            metadata: {
+                [key: string]: unknown;
+            };
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
         };
         /** Body_submit_kyb_restaurant_api_v1_kyb_restaurant_post */
         Body_submit_kyb_restaurant_api_v1_kyb_restaurant_post: {
@@ -1713,6 +2183,11 @@ export interface components {
             detail?: components["schemas"]["ValidationError"][];
         };
         /**
+         * ModerationAction
+         * @enum {string}
+         */
+        ModerationAction: "hide" | "unhide" | "delete";
+        /**
          * OpeningHours
          * @description Strict - for request payloads.
          */
@@ -1771,6 +2246,12 @@ export interface components {
              */
             mobile_money: boolean;
         };
+        /**
+         * PhotoParentType
+         * @description A photo is embedded in its event or restaurant rather than a document.
+         * @enum {string}
+         */
+        PhotoParentType: "event" | "restaurant";
         /** PriceRange */
         PriceRange: {
             /** Min Price */
@@ -1831,6 +2312,106 @@ export interface components {
             /** Refresh Token */
             refresh_token?: string | null;
         };
+        /**
+         * ReportContentType
+         * @enum {string}
+         */
+        ReportContentType: "review" | "event" | "photo" | "review_reply";
+        /**
+         * ReportCreate
+         * @description A report submitted by an authenticated user.
+         *
+         *     For ``photo`` reports, ``content_id`` identifies the event/restaurant that
+         *     owns the image and ``photo_key`` must be the exact image key or its public
+         *     URL. The service verifies membership before it modifies anything.
+         */
+        ReportCreate: {
+            content_type: components["schemas"]["ReportContentType"];
+            /** Content Id */
+            content_id: string;
+            photo_parent_type?: components["schemas"]["PhotoParentType"] | null;
+            /** Photo Key */
+            photo_key?: string | null;
+            /** Reason */
+            reason: string;
+            /** Details */
+            details?: string | null;
+        };
+        /**
+         * ReportDecisionRequest
+         * @description Staff rationale and structured context for resolve/dismiss decisions.
+         */
+        ReportDecisionRequest: {
+            /** Decision Note */
+            decision_note?: string | null;
+            /** Decision Metadata */
+            decision_metadata?: {
+                [key: string]: unknown;
+            };
+        };
+        /** ReportModerationRequest */
+        ReportModerationRequest: {
+            action: components["schemas"]["ModerationAction"];
+            /** Moderation Note */
+            moderation_note?: string | null;
+            /** Moderation Metadata */
+            moderation_metadata?: {
+                [key: string]: unknown;
+            };
+        };
+        /** ReportRead */
+        ReportRead: {
+            id: string;
+            /** Reporter Id */
+            reporter_id: string;
+            content_type: components["schemas"]["ReportContentType"];
+            /** Content Id */
+            content_id: string;
+            photo_parent_type?: components["schemas"]["PhotoParentType"] | null;
+            /** Photo Key */
+            photo_key?: string | null;
+            /** Reason */
+            reason: string;
+            /** Details */
+            details?: string | null;
+            status: components["schemas"]["ReportStatus"];
+            /** Decision Note */
+            decision_note?: string | null;
+            /** Decision Metadata */
+            decision_metadata?: {
+                [key: string]: unknown;
+            };
+            /** Decided By */
+            decided_by?: string | null;
+            /** Decided At */
+            decided_at?: string | null;
+            moderation_action?: components["schemas"]["ModerationAction"] | null;
+            /** Moderation Note */
+            moderation_note?: string | null;
+            /** Moderation Metadata */
+            moderation_metadata?: {
+                [key: string]: unknown;
+            };
+            /** Moderated By */
+            moderated_by?: string | null;
+            /** Moderated At */
+            moderated_at?: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /**
+         * ReportStatus
+         * @enum {string}
+         */
+        ReportStatus: "pending" | "resolved" | "dismissed";
         /** ResendVerificationRequest */
         ResendVerificationRequest: {
             /**
@@ -2540,7 +3121,7 @@ export interface components {
          * UserRole
          * @enum {string}
          */
-        UserRole: "user" | "creator" | "restaurateur" | "admin" | "superadmin";
+        UserRole: "user" | "creator" | "restaurateur" | "moderator" | "support" | "finance" | "admin" | "superadmin";
         /** UserSettings */
         UserSettings: {
             security?: components["schemas"]["SecuritySettings"];
@@ -4257,6 +4838,37 @@ export interface operations {
             };
         };
     };
+    record_ticket_link_click_api_v1_events__event_id__ticket_link_click_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                event_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     upload_event_photo_api_v1_events__event_id__photos_post: {
         parameters: {
             query?: never;
@@ -4560,6 +5172,41 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ReviewRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_report_api_v1_reports_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportRead"];
                 };
             };
             /** @description Validation Error */
@@ -5146,6 +5793,43 @@ export interface operations {
             };
         };
     };
+    list_events_api_v1_admin_events_get: {
+        parameters: {
+            query?: {
+                status?: components["schemas"]["EventStatus"] | null;
+                creator_id?: string | null;
+                restaurant_id?: string | null;
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EventRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     approve_event_api_v1_admin_events__event_id__approve_post: {
         parameters: {
             query?: never;
@@ -5243,6 +5927,37 @@ export interface operations {
             };
         };
     };
+    dashboard_api_v1_admin_dashboard_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_users_api_v1_admin_users_get: {
         parameters: {
             query?: {
@@ -5267,7 +5982,263 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": unknown;
+                    "application/json": components["schemas"]["AdminUserResponse"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    user_activity_api_v1_admin_users__user_id__activity_get: {
+        parameters: {
+            query?: {
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditLogRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_user_api_v1_admin_users__user_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_user_api_v1_admin_users__user_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminUserUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_user_role_api_v1_admin_users__user_id__role_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                user_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminUserRoleUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminUserResponse"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_restaurants_api_v1_admin_restaurants_get: {
+        parameters: {
+            query?: {
+                status?: components["schemas"]["RestaurantStatus"] | null;
+                owner_id?: string | null;
+                is_active?: boolean | null;
+                search?: string | null;
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminRestaurantRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_restaurant_api_v1_admin_restaurants__restaurant_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                restaurant_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AdminRestaurantUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminRestaurantRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_audit_logs_api_v1_admin_audit_logs_get: {
+        parameters: {
+            query?: {
+                actor_id?: string | null;
+                target_id?: string | null;
+                target_type?: string | null;
+                action?: string | null;
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AuditLogRead"][];
                 };
             };
             /** @description Validation Error */
@@ -5400,6 +6371,187 @@ export interface operations {
                 };
                 content: {
                     "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_reports_api_v1_admin_reports_get: {
+        parameters: {
+            query?: {
+                status?: components["schemas"]["ReportStatus"] | null;
+                content_type?: components["schemas"]["ReportContentType"] | null;
+                reporter_id?: string | null;
+                page?: number;
+                per_page?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportRead"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_report_api_v1_admin_reports__report_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    resolve_report_api_v1_admin_reports__report_id__resolve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dismiss_report_api_v1_admin_reports__report_id__dismiss_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportDecisionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportRead"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    moderate_report_content_api_v1_admin_reports__report_id__moderate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                report_id: string;
+            };
+            cookie?: {
+                access_token?: string | null;
+            };
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReportModerationRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReportRead"];
                 };
             };
             /** @description Validation Error */

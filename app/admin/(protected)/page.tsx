@@ -2,52 +2,120 @@
 
 import Link from "next/link";
 import PageHeader from "@/components/dashboard/PageHeader";
-import StatCard from "@/components/dashboard/StatCard";
 import {
   usePendingKyc,
   usePendingEvents,
   useAdminRestaurantRequests,
-  usePlatformStats,
 } from "@/hooks/useAdmin";
+import { useReports } from "@/hooks/useReports";
 
 function QueueCard({ href, label, count }: { href: string; label: string; count: number }) {
   return (
     <Link
       href={href}
-      className="cut-corners-sm flex items-center justify-between bg-mustard/25 p-4 shadow-[3px_3px_0_var(--color-ink)] hover:shadow-[5px_5px_0_var(--color-ink)]"
+      className="flex items-center justify-between rounded-xl border border-border bg-panel p-5 transition-colors hover:border-primary/50"
     >
       <span className="text-sm font-semibold text-ink">{label}</span>
-      <span className="text-stamp text-xl text-ink">{count}</span>
+      <span className="text-2xl font-bold text-primary">{count}</span>
     </Link>
   );
 }
+
+type RecentType = "kyc_creator" | "kyc_restaurant" | "request" | "event" | "report";
+
+type RecentItem = {
+  id: string;
+  type: RecentType;
+  title: string;
+  date: string;
+  href: string;
+};
+
+const RECENT_TYPE_LABELS: Record<RecentType, string> = {
+  kyc_creator: "KYC Créateur",
+  kyc_restaurant: "KYC Restaurant",
+  request: "Référencement",
+  event: "Événement",
+  report: "Signalement",
+};
+
+const RECENT_TYPE_STYLES: Record<RecentType, string> = {
+  kyc_creator: "bg-info-soft text-info",
+  kyc_restaurant: "bg-mustard/20 text-[#8A6A00]",
+  request: "bg-success-soft text-success",
+  event: "bg-primary/10 text-primary-dark",
+  report: "bg-danger-ui-soft text-danger-ui",
+};
 
 export default function AdminOverviewPage() {
   const { data: pendingKyc } = usePendingKyc();
   const { data: pendingEvents } = usePendingEvents();
   const { data: pendingRequests } = useAdminRestaurantRequests({ status: "pending" });
-  const { data: stats, isPending: statsPending, isError: statsError } = usePlatformStats();
+  const { data: pendingReports } = useReports({ status: "pending", per_page: 50 });
 
-  const kycCount = pendingKyc?.length ?? 0;
+  const creatorKycCount = (pendingKyc ?? []).filter(
+    (kyc) => kyc.kyc_type === "person" || kyc.kyc_type === "creator"
+  ).length;
+  const restaurantKycCount = (pendingKyc ?? []).filter(
+    (kyc) => kyc.kyc_type === "restaurant"
+  ).length;
   const eventsCount = pendingEvents?.length ?? 0;
   const requestsCount = pendingRequests?.length ?? 0;
-  const hasQueue = kycCount + eventsCount + requestsCount > 0;
+  const reportsCount = pendingReports?.length ?? 0;
+  const hasQueue =
+    creatorKycCount + restaurantKycCount + eventsCount + requestsCount + reportsCount > 0;
+
+  // Same queues as the counters above, flattened into one chronological feed
+  // — still "what needs attention", just detailed instead of counted.
+  const recentItems: RecentItem[] = [
+    ...(pendingKyc ?? []).map((kyc) => ({
+      id: kyc.id,
+      type: (kyc.kyc_type === "restaurant" ? "kyc_restaurant" : "kyc_creator") as RecentType,
+      title: kyc.restaurant_name ?? `${kyc.first_name} ${kyc.last_name}`,
+      date: kyc.submitted_at ?? "",
+      href: `/admin/verifications/${kyc.id}`,
+    })),
+    ...(pendingRequests ?? []).map((request) => ({
+      id: request.id,
+      type: "request" as RecentType,
+      title: request.name,
+      date: request.created_at,
+      href: "/admin/restaurants",
+    })),
+    ...(pendingEvents ?? []).map((event) => ({
+      id: event.id,
+      type: "event" as RecentType,
+      title: event.title,
+      date: event.created_at,
+      href: `/admin/evenements/${event.id}`,
+    })),
+    ...(pendingReports ?? []).map((report) => ({
+      id: report.id,
+      type: "report" as RecentType,
+      title: report.reason,
+      date: report.created_at,
+      href: `/admin/signalements/${report.id}`,
+    })),
+  ]
+    .filter((item) => item.date)
+    .sort((a, b) => (a.date < b.date ? 1 : -1))
+    .slice(0, 5);
 
   return (
     <div>
       <PageHeader
         eyebrow="ADMIN RESTO"
-        title="Vue d'ensemble"
-        subtitle="La file d'action d'abord — les tendances sont dans Statistiques."
+        title="File d'action"
+        subtitle="Ce qui attend une décision aujourd'hui. Les tendances de croissance sont dans Statistiques."
       />
 
-      {hasQueue && (
-        <div className="mb-8 grid gap-3 sm:grid-cols-3">
-          {kycCount > 0 && (
-            <QueueCard href="/admin/verifications" label="Vérifications KYC" count={kycCount} />
+      {hasQueue ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {creatorKycCount > 0 && (
+            <QueueCard href="/admin/verifications" label="KYC Créateur en attente" count={creatorKycCount} />
           )}
-          {eventsCount > 0 && (
-            <QueueCard href="/admin/evenements" label="Événements à modérer" count={eventsCount} />
+          {restaurantKycCount > 0 && (
+            <QueueCard href="/admin/verifications" label="KYC Restaurant en attente" count={restaurantKycCount} />
           )}
           {requestsCount > 0 && (
             <QueueCard
@@ -56,24 +124,50 @@ export default function AdminOverviewPage() {
               count={requestsCount}
             />
           )}
+          {eventsCount > 0 && (
+            <QueueCard href="/admin/evenements" label="Événements à modérer" count={eventsCount} />
+          )}
+          {reportsCount > 0 && (
+            <QueueCard href="/admin/signalements" label="Contenus signalés" count={reportsCount} />
+          )}
+        </div>
+      ) : (
+        <p className="text-sm text-ink/60">Rien n&apos;attend de décision pour le moment.</p>
+      )}
+
+      {recentItems.length > 0 && (
+        <div className="mt-8 rounded-xl border border-border bg-panel">
+          <div className="border-b border-border px-5 py-4">
+            <h2 className="text-sm font-bold text-ink">Arrivées récentes</h2>
+            <p className="mt-0.5 text-xs text-ink/50">
+              Les 5 dernières demandes soumises, tous types confondus.
+            </p>
+          </div>
+          <div>
+            {recentItems.map((item, index) => (
+              <Link
+                key={`${item.type}-${item.id}`}
+                href={item.href}
+                className={`flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-app-bg ${
+                  index < recentItems.length - 1 ? "border-b border-border-soft" : ""
+                }`}
+              >
+                <div className="flex min-w-0 items-center gap-3">
+                  <span
+                    className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${RECENT_TYPE_STYLES[item.type]}`}
+                  >
+                    {RECENT_TYPE_LABELS[item.type]}
+                  </span>
+                  <span className="truncate text-sm font-medium text-ink">{item.title}</span>
+                </div>
+                <span className="shrink-0 text-xs text-ink/45">
+                  {new Date(item.date).toLocaleDateString("fr-FR")}
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       )}
-
-      {statsError && (
-        <p className="mb-4 text-sm font-semibold text-primary-dark">
-          Impossible de charger les statistiques.
-        </p>
-      )}
-
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-        <StatCard
-          label="Restaurants publiés"
-          value={statsPending ? "…" : String(stats?.total_restaurants ?? 0)}
-        />
-        <StatCard label="Utilisateurs" value={statsPending ? "…" : String(stats?.total_users ?? 0)} />
-        <StatCard label="Événements" value={statsPending ? "…" : String(stats?.total_events ?? 0)} />
-        <StatCard label="Avis" value={statsPending ? "…" : String(stats?.total_reviews ?? 0)} />
-      </div>
     </div>
   );
 }

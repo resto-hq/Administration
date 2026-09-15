@@ -174,3 +174,70 @@ export function useRejectRestaurantRequest() {
     },
   });
 }
+
+export function useAdminUser(userId: string, options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: queryKeys.admin.userDetail(userId),
+    queryFn: () => adminService.getUser(userId),
+    enabled: options?.enabled ?? Boolean(userId),
+  });
+}
+
+export function useUpdateUserStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      userId,
+      body,
+    }: {
+      userId: string;
+      body: Parameters<typeof adminService.updateUserStatus>[1];
+    }) => adminService.updateUserStatus(userId, body),
+    onSuccess: (_data, { userId }) => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "users"] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.userDetail(userId) });
+    },
+  });
+}
+
+export function useUserActivity(
+  userId: string,
+  query?: Parameters<typeof adminService.getUserActivity>[1],
+  options?: { enabled?: boolean }
+) {
+  return useQuery({
+    queryKey: queryKeys.admin.userActivity(userId, query),
+    queryFn: () => adminService.getUserActivity(userId, query),
+    enabled: options?.enabled ?? Boolean(userId),
+  });
+}
+
+export function useAdminRestaurants(query?: Parameters<typeof adminService.listAdminRestaurants>[0]) {
+  return useQuery({
+    queryKey: queryKeys.admin.restaurants(query),
+    queryFn: () => adminService.listAdminRestaurants(query),
+  });
+}
+
+export function useUpdateAdminRestaurantStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      restaurantId,
+      body,
+    }: {
+      restaurantId: string;
+      body: Parameters<typeof adminService.updateAdminRestaurantStatus>[1];
+    }) => adminService.updateAdminRestaurantStatus(restaurantId, body),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin", "restaurants"] });
+    },
+  });
+}
+
+export function useAuditLogs(query?: Parameters<typeof adminService.listAuditLogs>[0]) {
+  return useQuery({
+    queryKey: queryKeys.admin.auditLogs(query),
+    queryFn: () => adminService.listAuditLogs(query),
+  });
+}

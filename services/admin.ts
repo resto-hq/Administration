@@ -1,9 +1,11 @@
 import { client } from "./client";
 import type { ApiJsonBody, ApiQuery, ApiResponse } from "./http-types";
+import type { components } from "./api-types";
 
-// None of the endpoints below have a response_model on the backend, so their
-// shapes are typed by hand from app/schemas/kyc.py, app/schemas/user.py and
-// app/features/admin/service.py.
+// KYC, /admin/stats and /admin/dashboard have no response_model on the
+// backend, so those shapes are typed by hand from app/schemas/kyc.py and
+// app/features/admin/service.py. Everything else below has a response_model
+// and comes straight from the generated schema.
 
 export type KycFileInfo = { field: string; url: string | null };
 
@@ -35,20 +37,13 @@ export type PlatformStats = {
   total_events: number;
   total_reviews: number;
   pending_kyc: number;
+  monthly_active_users: number;
+  ticket_link_clicks: number;
 };
 
-export type AdminUserRecord = {
-  id: string;
-  username: string;
-  email: string;
-  phone: string | null;
-  first_name: string;
-  last_name: string;
-  role: "user" | "creator" | "restaurateur" | "admin" | "superadmin";
-  is_active: boolean;
-  email_verified: boolean;
-  created_at: string;
-};
+export type AdminUserResponse = components["schemas"]["AdminUserResponse"];
+export type AdminRestaurantRead = components["schemas"]["AdminRestaurantRead"];
+export type AuditLogRead = components["schemas"]["AuditLogRead"];
 
 export async function getPendingKyc(): Promise<KycAdminRecord[]> {
   const { data } = await client.get("/api/v1/admin/kyc/pending");
@@ -105,12 +100,68 @@ export async function getPlatformStats(): Promise<PlatformStats> {
 
 export async function listUsers(
   query?: ApiQuery<"list_users_api_v1_admin_users_get">
-): Promise<AdminUserRecord[]> {
+): Promise<ApiResponse<"list_users_api_v1_admin_users_get">> {
   const { data } = await client.get("/api/v1/admin/users", { params: query });
   return data;
 }
 
-export async function listAdmins(): Promise<AdminUserRecord[]> {
+export async function getUser(
+  userId: string
+): Promise<ApiResponse<"get_user_api_v1_admin_users__user_id__get">> {
+  const { data } = await client.get(`/api/v1/admin/users/${userId}`);
+  return data;
+}
+
+export async function updateUserStatus(
+  userId: string,
+  body: ApiJsonBody<"update_user_api_v1_admin_users__user_id__patch">
+): Promise<ApiResponse<"update_user_api_v1_admin_users__user_id__patch">> {
+  const { data } = await client.patch(`/api/v1/admin/users/${userId}`, body);
+  return data;
+}
+
+export async function updateUserRole(
+  userId: string,
+  body: ApiJsonBody<"update_user_role_api_v1_admin_users__user_id__role_patch">
+): Promise<ApiResponse<"update_user_role_api_v1_admin_users__user_id__role_patch">> {
+  const { data } = await client.patch(`/api/v1/admin/users/${userId}/role`, body);
+  return data;
+}
+
+export async function getUserActivity(
+  userId: string,
+  query?: ApiQuery<"user_activity_api_v1_admin_users__user_id__activity_get">
+): Promise<ApiResponse<"user_activity_api_v1_admin_users__user_id__activity_get">> {
+  const { data } = await client.get(`/api/v1/admin/users/${userId}/activity`, {
+    params: query,
+  });
+  return data;
+}
+
+export async function listAdminRestaurants(
+  query?: ApiQuery<"list_restaurants_api_v1_admin_restaurants_get">
+): Promise<ApiResponse<"list_restaurants_api_v1_admin_restaurants_get">> {
+  const { data } = await client.get("/api/v1/admin/restaurants", { params: query });
+  return data;
+}
+
+export async function updateAdminRestaurantStatus(
+  restaurantId: string,
+  body: ApiJsonBody<"update_restaurant_api_v1_admin_restaurants__restaurant_id__patch">
+): Promise<ApiResponse<"update_restaurant_api_v1_admin_restaurants__restaurant_id__patch">> {
+  const { data } = await client.patch(`/api/v1/admin/restaurants/${restaurantId}`, body);
+  return data;
+}
+
+export async function listAuditLogs(
+  query?: ApiQuery<"list_audit_logs_api_v1_admin_audit_logs_get">
+): Promise<ApiResponse<"list_audit_logs_api_v1_admin_audit_logs_get">> {
+  const { data } = await client.get("/api/v1/admin/audit-logs", { params: query });
+  return data;
+}
+
+// No response_model on this one either — same reasoning as PlatformStats.
+export async function listAdmins(): Promise<AdminUserResponse[]> {
   const { data } = await client.get("/api/v1/admin/admins");
   return data;
 }

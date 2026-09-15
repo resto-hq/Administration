@@ -56,9 +56,18 @@ export const queryKeys = {
     pendingEvents: (query?: unknown) => ["admin", "events", "pending", query ?? {}] as const,
     stats: () => ["admin", "stats"] as const,
     users: (query?: unknown) => ["admin", "users", query ?? {}] as const,
+    userDetail: (userId: string) => ["admin", "users", "detail", userId] as const,
+    userActivity: (userId: string, query?: unknown) =>
+      ["admin", "users", "activity", userId, query ?? {}] as const,
     admins: () => ["admin", "admins"] as const,
     restaurantRequests: (query?: unknown) =>
       ["admin", "restaurantRequests", query ?? {}] as const,
+    restaurants: (query?: unknown) => ["admin", "restaurants", query ?? {}] as const,
+    auditLogs: (query?: unknown) => ["admin", "auditLogs", query ?? {}] as const,
+  },
+  reports: {
+    list: (query?: unknown) => ["reports", "list", query ?? {}] as const,
+    detail: (reportId: string) => ["reports", "detail", reportId] as const,
   },
   support: {
     conversations: (query?: unknown) => ["support", "conversations", query ?? {}] as const,
