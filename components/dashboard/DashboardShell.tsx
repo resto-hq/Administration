@@ -17,7 +17,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
 
   if (kycPending) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-canvas bg-grain">
+      <div className="flex min-h-screen items-center justify-center bg-app-bg">
         <p className="text-sm text-ink/60">Chargement…</p>
       </div>
     );

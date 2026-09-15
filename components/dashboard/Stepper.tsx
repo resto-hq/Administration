@@ -4,12 +4,12 @@ export default function Stepper({ steps, current }: { steps: string[]; current: 
       {steps.map((label, index) => (
         <div key={label} className="flex shrink-0 items-center gap-2">
           <div
-            className={`cut-corners-sm flex h-9 w-9 shrink-0 items-center justify-center text-sm font-bold ${
+            className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${
               index < current
                 ? "bg-ink text-paper"
                 : index === current
-                  ? "bg-primary text-paper"
-                  : "bg-paper-alt text-ink/40"
+                  ? "bg-primary text-white"
+                  : "bg-app-bg text-ink/40"
             }`}
           >
             {index + 1}

@@ -40,17 +40,17 @@ export default function DashboardOverviewPage() {
       {aVerifier > 0 && (
         <Link
           href="/dashboard/restaurants"
-          className="cut-corners mb-8 flex flex-col justify-between gap-3 bg-mustard/25 p-5 shadow-[4px_4px_0_var(--color-ink)] sm:flex-row sm:items-center"
+          className="mb-8 flex flex-col justify-between gap-3 rounded-xl border border-border bg-mustard/15 p-5 sm:flex-row sm:items-center"
         >
           <div>
-            <p className="text-stamp text-ink">
+            <p className="font-bold text-ink">
               {aVerifier} restaurant{aVerifier > 1 ? "s" : ""} à finaliser côté vérification
             </p>
             <p className="mt-1 text-sm text-ink/70">
               Termine leur dossier pour qu&apos;ils apparaissent publiquement sur Resto.
             </p>
           </div>
-          <span className="cut-corners-sm shrink-0 bg-ink px-4 py-2 text-sm font-semibold text-paper">
+          <span className="shrink-0 rounded-lg bg-ink px-4 py-2 text-sm font-semibold text-paper">
             Voir mes restaurants →
           </span>
         </Link>

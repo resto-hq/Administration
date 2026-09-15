@@ -12,10 +12,10 @@ export default function FileDrop({ id, label }: { id: string; label: string }) {
       </label>
       <label
         htmlFor={id}
-        className="cut-corners-sm flex cursor-pointer items-center justify-between border border-dashed border-ink/30 bg-paper-alt px-4 py-3 text-sm text-ink/60 hover:border-primary hover:text-ink"
+        className="flex cursor-pointer items-center justify-between rounded-lg border border-dashed border-ink/25 bg-app-bg px-4 py-3 text-sm text-ink/60 hover:border-primary hover:text-ink"
       >
         <span className="truncate">{fileName ?? "Choisir un fichier (PDF, JPG, PNG)"}</span>
-        <span className="cut-corners-sm ml-3 shrink-0 bg-ink px-3 py-1.5 text-xs font-semibold text-paper">
+        <span className="ml-3 shrink-0 rounded-md bg-ink px-3 py-1.5 text-xs font-semibold text-paper">
           Parcourir
         </span>
       </label>

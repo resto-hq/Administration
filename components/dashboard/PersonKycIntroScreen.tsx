@@ -8,10 +8,10 @@ export default function PersonKycIntroScreen({ onSkip }: { onSkip: () => void })
   const router = useRouter();
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-canvas bg-grain px-6">
+    <div className="flex min-h-screen items-center justify-center bg-app-bg px-6">
       <div className="w-full max-w-lg">
-        <p className="text-xs font-semibold tracking-[0.3em] text-primary-dark">BIENVENUE</p>
-        <h1 className="text-stamp mt-1 text-2xl text-ink sm:text-3xl">Vérifie ton identité</h1>
+        <p className="text-xs font-semibold tracking-wide text-ink/45 uppercase">Bienvenue</p>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-ink sm:text-3xl">Vérifie ton identité</h1>
         <p className="mt-2 text-sm text-ink/70">
           Avant de créer un restaurant, on doit vérifier qui tu es — c&apos;est rapide (nom,
           adresse, une pièce d&apos;identité). Tu peux le faire maintenant, ou plus tard depuis

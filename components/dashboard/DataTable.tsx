@@ -57,12 +57,12 @@ export default function DataTable<T>({
   }
 
   return (
-    <div className="cut-corners-sm overflow-x-auto bg-paper shadow-[4px_4px_0_var(--color-ink)]">
+    <div className="overflow-x-auto rounded-xl border border-border bg-panel">
       <table className="w-full min-w-[640px] border-collapse text-sm">
         <thead>
-          <tr className="border-b border-ink/10 text-left text-xs font-semibold tracking-wide text-ink/50">
+          <tr className="border-b border-border text-left text-[11px] font-semibold tracking-wide text-ink/40 uppercase">
             {columns.map((column) => (
-              <th key={column.key} className={`px-5 py-3 ${column.align === "right" ? "text-right" : ""}`}>
+              <th key={column.key} className={`px-5 py-3.5 ${column.align === "right" ? "text-right" : ""}`}>
                 {column.sortValue ? (
                   <button
                     type="button"
@@ -79,7 +79,7 @@ export default function DataTable<T>({
                 )}
               </th>
             ))}
-            {actions && <th className="px-5 py-3 text-right">Actions</th>}
+            {actions && <th className="px-5 py-3.5 text-right">Actions</th>}
           </tr>
         </thead>
         <tbody>
@@ -97,7 +97,7 @@ export default function DataTable<T>({
                 onKeyDown={(event: KeyboardEvent) => {
                   if (event.key === "Enter") go();
                 }}
-                className="cursor-pointer border-b border-ink/5 transition-colors last:border-0 hover:bg-mustard/10"
+                className="cursor-pointer border-b border-border-soft transition-colors last:border-0 hover:bg-app-bg"
               >
                 {columns.map((column) => (
                   <td

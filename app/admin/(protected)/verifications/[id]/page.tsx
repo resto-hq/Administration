@@ -56,7 +56,7 @@ export default function AdminVerificationDetailPage() {
         <RequestStatusBadge status={kyc.status} />
       </div>
 
-      <div className="cut-corners-sm max-w-xl space-y-4 bg-paper p-6 shadow-[4px_4px_0_var(--color-ink)]">
+      <div className="max-w-xl space-y-4 rounded-xl border border-border bg-panel p-6">
         {kyc.submitted_at && (
           <p className="text-xs text-ink/50">
             Envoyé le {new Date(kyc.submitted_at).toLocaleDateString("fr-FR")}
@@ -126,14 +126,14 @@ export default function AdminVerificationDetailPage() {
                     href={file.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="cut-corners-sm bg-paper-alt px-3 py-1.5 text-xs font-semibold text-ink hover:text-primary-dark"
+                    className="rounded-lg border border-border bg-app-bg px-3 py-1.5 text-xs font-semibold text-ink hover:text-primary"
                   >
                     {file.field} →
                   </a>
                 ) : (
                   <span
                     key={file.field}
-                    className="cut-corners-sm bg-ink/5 px-3 py-1.5 text-xs text-ink/40"
+                    className="rounded-lg bg-ink/5 px-3 py-1.5 text-xs text-ink/40"
                   >
                     {file.field} (absent)
                   </span>
@@ -144,7 +144,7 @@ export default function AdminVerificationDetailPage() {
         )}
 
         {kyc.rejection_reason && (
-          <p className="cut-corners-sm bg-primary/10 p-4 text-sm text-primary-dark">
+          <p className="rounded-lg bg-danger-ui-soft p-4 text-sm text-danger-ui">
             Motif du dernier rejet : {kyc.rejection_reason}
           </p>
         )}
@@ -178,7 +178,7 @@ export default function AdminVerificationDetailPage() {
                 value={reason}
                 onChange={(event) => setReason(event.target.value)}
                 required
-                className="cut-corners-sm w-full border border-ink/15 bg-paper-alt px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/40"
+                className="w-full rounded-lg border border-border bg-app-bg px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/30"
               />
               {rejectKyc.isError && (
                 <p className="text-sm font-semibold text-primary-dark">

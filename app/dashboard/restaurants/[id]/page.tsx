@@ -53,8 +53,8 @@ export default function RestaurantDetailPage() {
             key={key}
             type="button"
             onClick={() => setTab(key)}
-            className={`cut-corners-sm px-4 py-2 text-sm font-semibold transition-colors ${
-              tab === key ? "bg-primary text-paper" : "bg-paper-alt text-ink/60 hover:text-ink"
+            className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
+              tab === key ? "bg-primary text-white" : "border border-border bg-panel text-ink/60 hover:text-ink"
             }`}
           >
             {TAB_LABELS[key]}

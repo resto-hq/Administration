@@ -61,12 +61,12 @@ export default function MesRestaurantsPage() {
         {isApproved ? (
           <Link
             href="/dashboard/restaurants/nouveau"
-            className="cut-corners-sm flex items-center justify-center gap-2 border border-dashed border-ink/30 p-5 text-sm font-semibold text-ink/60 hover:border-primary hover:text-ink"
+            className="flex items-center justify-center gap-2 rounded-xl border border-dashed border-ink/25 p-5 text-sm font-semibold text-ink/60 hover:border-primary hover:text-ink"
           >
             + Ajouter un restaurant
           </Link>
         ) : (
-          <div className="cut-corners-sm border border-dashed border-ink/15 p-5 text-center text-sm text-ink/40">
+          <div className="rounded-xl border border-dashed border-ink/15 p-5 text-center text-sm text-ink/40">
             <p className="font-semibold">+ Ajouter un restaurant</p>
             <p className="mt-1 text-xs">
               Vérifie d&apos;abord ton identité (

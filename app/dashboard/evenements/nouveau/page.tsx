@@ -71,7 +71,7 @@ export default function NouvelEvenementPage() {
                 id="restaurant_id"
                 name="restaurant_id"
                 defaultValue={defaultRestaurantId}
-                className="cut-corners-sm w-full border border-ink/15 bg-paper-alt px-4 py-3 text-ink outline-none focus:border-primary"
+                className="w-full rounded-lg border border-border bg-app-bg px-4 py-3 text-ink outline-none focus:border-primary"
               >
                 {myRestaurants.map((restaurant) => (
                   <option key={restaurant.id} value={restaurant.id}>
@@ -92,7 +92,7 @@ export default function NouvelEvenementPage() {
               id="event_type"
               name="event_type"
               defaultValue="event"
-              className="cut-corners-sm w-full border border-ink/15 bg-paper-alt px-4 py-3 text-ink outline-none focus:border-primary"
+              className="w-full rounded-lg border border-border bg-app-bg px-4 py-3 text-ink outline-none focus:border-primary"
             >
               <option value="event">Événement / animation</option>
               <option value="workshop">Atelier culinaire</option>
@@ -111,7 +111,7 @@ export default function NouvelEvenementPage() {
             name="description"
             rows={3}
             required
-            className="cut-corners-sm w-full border border-ink/15 bg-paper-alt px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/40"
+            className="w-full rounded-lg border border-border bg-app-bg px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/30"
           />
         </div>
 

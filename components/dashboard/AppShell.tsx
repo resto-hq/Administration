@@ -8,9 +8,14 @@ export default function AppShell({
   children: ReactNode;
 }) {
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-canvas bg-grain md:flex-row">
+    <div className="flex min-h-screen flex-col bg-app-bg md:flex-row">
       {sidebar}
-      <main className="flex-1 overflow-y-auto px-6 py-8 md:px-10 md:py-10">{children}</main>
+      <main className="min-w-0 flex-1">
+        <div className="flex h-14 items-center border-b border-border bg-panel px-4 md:hidden">
+          <span className="ml-12 text-sm font-semibold text-ink">Resto</span>
+        </div>
+        <div className="px-6 py-8 md:px-10 md:py-10">{children}</div>
+      </main>
     </div>
   );
 }

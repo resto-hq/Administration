@@ -41,7 +41,7 @@ export default function EvenementDetailPage() {
         <RequestStatusBadge status={evenement.status} />
       </div>
 
-      <div className="cut-corners-sm max-w-xl bg-paper p-6 shadow-[4px_4px_0_var(--color-ink)]">
+      <div className="max-w-xl rounded-xl border border-border bg-panel p-6">
         <p className="text-ink/80">{evenement.description}</p>
         {evenement.ticket_link && (
           <a

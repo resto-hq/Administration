@@ -3,9 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
-export type NavItem = { href: string; label: string; icon: ReactNode };
+export type NavItem = { href: string; label: string; icon: ReactNode; count?: number };
 
 export default function SidebarNav({
   items,
@@ -17,39 +17,89 @@ export default function SidebarNav({
   footer?: ReactNode;
 }) {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const [lastPathname, setLastPathname] = useState(pathname);
+
+  if (pathname !== lastPathname) {
+    setLastPathname(pathname);
+    setOpen(false);
+  }
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
 
   return (
-    <aside className="flex w-full flex-col gap-1 bg-ink px-3 py-4 md:sticky md:top-0 md:h-screen md:w-64 md:shrink-0 md:overflow-y-auto md:py-8">
-      <Link href="/" className="mb-6 hidden items-center justify-center gap-2 px-2 md:flex">
-        <Image src="/logo-mark.png" alt="Resto" width={140} height={48} className="h-8 w-auto" />
-        {badge && (
-          <span className="cut-corners-sm bg-mustard px-2 py-0.5 text-[10px] font-bold tracking-wide text-ink">
-            {badge}
-          </span>
-        )}
-      </Link>
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-label="Ouvrir le menu"
+        className="fixed top-2.5 left-3 z-50 flex h-9 w-9 items-center justify-center rounded-lg border border-border bg-panel text-ink md:hidden"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-5 w-5">
+          <line x1="4" y1="7" x2="20" y2="7" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+          <line x1="4" y1="17" x2="20" y2="17" />
+        </svg>
+      </button>
 
-      <nav className="flex gap-1 overflow-x-auto md:flex-col md:overflow-visible">
-        {items.map((item) => {
-          const active = pathname === item.href;
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`flex shrink-0 items-center gap-3 px-4 py-2.5 text-sm font-semibold transition-colors md:shrink ${
-                active ? "cut-corners-sm bg-primary text-paper" : "text-paper/60 hover:text-paper"
-              }`}
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-5 w-5 shrink-0">
-                {item.icon}
-              </svg>
-              <span className="whitespace-nowrap">{item.label}</span>
-            </Link>
-          );
-        })}
-      </nav>
+      {open && (
+        <div
+          className="fixed inset-0 z-40 bg-ink/50 md:hidden"
+          onClick={() => setOpen(false)}
+          aria-hidden="true"
+        />
+      )}
 
-      {footer && <div className="mt-2 md:mt-auto md:pt-4">{footer}</div>}
-    </aside>
+      <aside
+        className={`fixed top-0 left-0 z-40 flex h-screen w-64 shrink-0 flex-col gap-1 bg-sidebar px-3 py-6 transition-transform duration-200 md:sticky md:translate-x-0 md:py-8 ${
+          open ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        <Link href="/" className="mb-6 flex items-center justify-center gap-2 px-2">
+          <Image src="/logo-mark.png" alt="Resto" width={140} height={48} className="h-8 w-auto" />
+          {badge && (
+            <span className="rounded-md bg-primary px-2 py-0.5 text-[10px] font-bold tracking-wide text-white">
+              {badge}
+            </span>
+          )}
+        </Link>
+
+        <nav className="flex flex-1 flex-col gap-1 overflow-y-auto">
+          {items.map((item) => {
+            const active = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${
+                  active ? "bg-primary text-white" : "text-sidebar-soft hover:bg-white/5 hover:text-paper"
+                }`}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} className="h-[18px] w-[18px] shrink-0">
+                  {item.icon}
+                </svg>
+                <span className="min-w-0 flex-1 truncate">{item.label}</span>
+                {typeof item.count === "number" && (
+                  <span
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                      active ? "bg-white/20 text-white" : "bg-white/10 text-sidebar-soft"
+                    }`}
+                  >
+                    {item.count}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {footer && <div className="border-t border-sidebar-line pt-4">{footer}</div>}
+      </aside>
+    </>
   );
 }

@@ -37,7 +37,7 @@ export default function EvenementsPage() {
           <select
             value={activeRestaurantId ?? ""}
             onChange={(event) => setSelectedId(event.target.value)}
-            className="cut-corners-sm border border-ink/15 bg-paper-alt px-4 py-2 text-sm text-ink outline-none focus:border-primary"
+            className="rounded-lg border border-border bg-app-bg px-4 py-2 text-sm text-ink outline-none focus:border-primary"
           >
             {myRestaurants.map((restaurant) => (
               <option key={restaurant.id} value={restaurant.id}>

@@ -40,7 +40,7 @@ export default function AvisDetailPage() {
       <BackLink href="/dashboard/avis" label="Retour aux avis" />
       <PageHeader eyebrow={avis.restaurant_name.toUpperCase()} title={`Avis`} />
 
-      <div className="cut-corners-sm max-w-xl space-y-4 bg-paper p-6 shadow-[4px_4px_0_var(--color-ink)]">
+      <div className="max-w-xl space-y-4 rounded-xl border border-border bg-panel p-6">
         <p className="text-lg text-primary-dark">
           {"★".repeat(Math.round(avis.rating))}
           {"☆".repeat(5 - Math.round(avis.rating))}
@@ -51,7 +51,7 @@ export default function AvisDetailPage() {
         </p>
 
         {avis.restaurant_response ? (
-          <div className="cut-corners-sm bg-paper-alt p-4">
+          <div className="rounded-lg bg-app-bg p-4">
             <p className="text-xs font-semibold tracking-wide text-ink/50">Ta réponse</p>
             <p className="mt-1 text-ink/80">{avis.restaurant_response}</p>
           </div>
@@ -67,7 +67,7 @@ export default function AvisDetailPage() {
               onChange={(event) => setResponse(event.target.value)}
               required
               maxLength={1000}
-              className="cut-corners-sm w-full border border-ink/15 bg-paper-alt px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/40"
+              className="w-full rounded-lg border border-border bg-app-bg px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/30"
             />
             {respondToReview.isError && (
               <p className="text-sm font-semibold text-primary-dark">

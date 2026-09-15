@@ -284,7 +284,7 @@ function Checkbox({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <fieldset className="space-y-4">
-      <legend className="text-stamp mb-1 text-lg text-ink">{title}</legend>
+      <legend className="mb-1 text-lg font-bold text-ink">{title}</legend>
       {children}
     </fieldset>
   );
@@ -405,7 +405,7 @@ export default function RestaurantFieldsForm({
             value={state.description}
             onChange={(e) => set("description", e.target.value)}
             maxLength={1500}
-            className="cut-corners-sm w-full border border-ink/15 bg-paper-alt px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/40"
+            className="w-full rounded-lg border border-border bg-app-bg px-4 py-3 text-ink outline-none placeholder:text-ink/35 focus:border-primary focus:ring-2 focus:ring-primary/30"
           />
         </div>
       </Section>
@@ -552,7 +552,7 @@ export default function RestaurantFieldsForm({
                     [key]: { ...state.opening_hours[key], open: e.target.value },
                   })
                 }
-                className="cut-corners-sm border border-ink/15 bg-paper-alt px-3 py-2 text-sm text-ink outline-none focus:border-primary"
+                className="rounded-lg border border-border bg-app-bg px-3 py-2 text-sm text-ink outline-none focus:border-primary"
               />
               <input
                 type="time"
@@ -563,7 +563,7 @@ export default function RestaurantFieldsForm({
                     [key]: { ...state.opening_hours[key], close: e.target.value },
                   })
                 }
-                className="cut-corners-sm border border-ink/15 bg-paper-alt px-3 py-2 text-sm text-ink outline-none focus:border-primary"
+                className="rounded-lg border border-border bg-app-bg px-3 py-2 text-sm text-ink outline-none focus:border-primary"
               />
             </div>
           ))}

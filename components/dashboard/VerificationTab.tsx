@@ -40,8 +40,8 @@ export default function VerificationTab({ restaurant }: { restaurant: Restaurant
 
   if (restaurant.status === "published") {
     return (
-      <div className="cut-corners max-w-lg bg-paper p-6 shadow-[5px_5px_0_var(--color-ink)]">
-        <p className="text-stamp text-ink">Restaurant vérifié</p>
+      <div className="max-w-lg rounded-xl border border-border bg-panel p-6">
+        <p className="font-bold text-ink">Restaurant vérifié</p>
         <p className="mt-2 text-sm text-ink/70">
           Ce restaurant est validé et visible publiquement sur Resto.
         </p>
@@ -51,8 +51,8 @@ export default function VerificationTab({ restaurant }: { restaurant: Restaurant
 
   if (restaurant.status === "pending") {
     return (
-      <div className="cut-corners max-w-lg bg-paper p-6 shadow-[5px_5px_0_var(--color-ink)]">
-        <p className="text-stamp text-ink">En cours de vérification</p>
+      <div className="max-w-lg rounded-xl border border-border bg-panel p-6">
+        <p className="font-bold text-ink">En cours de vérification</p>
         <p className="mt-2 text-sm text-ink/70">
           On revient vers toi sous 48h. La fiche reste privée jusqu&apos;à validation.
         </p>
@@ -63,7 +63,7 @@ export default function VerificationTab({ restaurant }: { restaurant: Restaurant
   return (
     <div className="max-w-lg space-y-5">
       {restaurant.status === "rejected" && restaurant.rejection_reason && (
-        <p className="cut-corners-sm bg-primary/10 p-4 text-sm text-primary-dark">
+        <p className="rounded-lg bg-danger-ui-soft p-4 text-sm text-danger-ui">
           Dossier rejeté : {restaurant.rejection_reason}
         </p>
       )}

@@ -27,11 +27,11 @@ export default function PersonKycStatusModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 px-6">
-      <div className="cut-corners w-full max-w-md bg-paper p-6 shadow-[6px_6px_0_var(--color-ink)] sm:p-8">
-        <p className="text-xs font-semibold tracking-[0.3em] text-primary-dark">
-          VÉRIFICATION D&apos;IDENTITÉ
+      <div className="w-full max-w-md rounded-2xl border border-border bg-panel p-6 sm:p-8">
+        <p className="text-xs font-semibold tracking-wide text-ink/45 uppercase">
+          Vérification d&apos;identité
         </p>
-        <h2 className="text-stamp mt-1 text-xl text-ink">
+        <h2 className="mt-1 text-xl font-bold text-ink">
           {status === "pending" ? "Dossier en cours de revue" : "Dossier rejeté"}
         </h2>
         <p className="mt-2 text-sm text-ink/70">
@@ -40,7 +40,7 @@ export default function PersonKycStatusModal({
             : "Ton dossier a été rejeté — tu peux le corriger et le soumettre à nouveau. En attendant, la création de restaurant reste bloquée."}
         </p>
         {status === "rejected" && rejectionReason && (
-          <p className="mt-3 cut-corners-sm bg-primary/10 p-3 text-sm text-primary-dark">
+          <p className="mt-3 rounded-lg bg-danger-ui-soft p-3 text-sm text-danger-ui">
             Motif : {rejectionReason}
           </p>
         )}

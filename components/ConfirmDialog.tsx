@@ -1,5 +1,6 @@
 "use client";
 
+import { createPortal } from "react-dom";
 import StampButton from "@/components/StampButton";
 
 export type ConfirmDialogState = {
@@ -18,16 +19,21 @@ export default function ConfirmDialog({
   state: ConfirmDialogState;
   onClose: () => void;
 }) {
-  return (
+  // Portaled to <body> because callers like the sidebar's logout button render
+  // this from inside the sidebar's slide-in drawer, which animates with a CSS
+  // transform — a transformed ancestor becomes the containing block for any
+  // `fixed` descendant, so without the portal this dialog gets trapped inside
+  // the sidebar's box instead of centering on the viewport.
+  return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-ink/40 px-6">
-      <div className="cut-corners w-full max-w-md bg-paper p-6 shadow-[6px_6px_0_var(--color-ink)] sm:p-8">
-        <h2 className="text-stamp text-xl text-ink">{state.title}</h2>
+      <div className="w-full max-w-md rounded-xl border border-border bg-panel p-6 sm:p-8">
+        <h2 className="text-xl font-bold text-ink">{state.title}</h2>
         <p className="mt-2 text-sm text-ink/70">{state.message}</p>
 
         <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <StampButton
             type="button"
-            className="flex-1"
+            className={`flex-1 ${state.danger ? "!bg-danger-ui hover:!bg-danger-ui/90" : ""}`}
             onClick={() => {
               state.onConfirm();
               onClose();
@@ -40,6 +46,7 @@ export default function ConfirmDialog({
           </StampButton>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
