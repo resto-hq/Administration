@@ -1,6 +1,6 @@
 "use client";
 
-import { type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import PageHeader from "@/components/dashboard/PageHeader";
 import BackLink from "@/components/dashboard/BackLink";
@@ -15,6 +15,7 @@ export default function NouvelEvenementPage() {
   const searchParams = useSearchParams();
   const { data: restaurants } = useMyRestaurants();
   const createEvent = useCreateEvent();
+  const [endDate, setEndDate] = useState("");
 
   const myRestaurants = (restaurants ?? []).map((restaurant) => ({
     id: restaurant.id,
@@ -117,7 +118,16 @@ export default function NouvelEvenementPage() {
 
         <div className="grid gap-5 sm:grid-cols-2">
           <FormField label="Début" id="start_date" type="datetime-local" required />
-          <FormField label="Fin (optionnel)" id="end_date" type="datetime-local" />
+          <div>
+            <FormField
+              label="Fin (optionnel)"
+              id="end_date"
+              type="datetime-local"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+            />
+            {!endDate && <p className="mt-1.5 text-xs text-ink/45">Durée : 1 jour par défaut si non précisée.</p>}
+          </div>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2">
