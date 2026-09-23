@@ -1,4 +1,5 @@
 import localFont from "next/font/local";
+import { Space_Grotesk } from "next/font/google";
 
 export const lufga = localFont({
   src: [
@@ -8,5 +9,13 @@ export const lufga = localFont({
     { path: "../app/fonts/lufga/LufgaBold.ttf", weight: "700", style: "normal" },
   ],
   variable: "--font-lufga",
+  display: "swap",
+});
+
+// Public showcase page only — the admin/dashboard shell keeps Lufga.
+export const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });

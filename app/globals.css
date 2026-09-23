@@ -25,6 +25,9 @@
   --color-danger-ui-soft: #FBEAE8;
   --color-info: #2563A8;
   --color-info-soft: #EAF1F8;
+
+  /* Public showcase page — alternates with white/paper-alt bands. */
+  --color-surface: #F1F1F3;
 }
 
 @theme inline {

@@ -1,69 +1,35 @@
-"use client";
-
-import { motion } from "framer-motion";
-
 const STEPS = [
   {
-    number: "01",
-    title: "Inscris-toi",
-    description:
-      "Crée ton compte et complète ton dossier KYB (pièce d'identité, licence commerciale).",
-    rotate: -6,
+    title: "Laisse ton numéro",
+    description: "On te prévient le jour de la sortie, et tu fais partie des premiers à l'utiliser.",
   },
   {
-    number: "02",
-    title: "Configure ta fiche",
-    description: "Ajoute tes photos, ton menu, tes horaires et tes spécialités.",
-    rotate: 4,
+    title: "Dis ce que tu cherches",
+    description: "Un budget, une envie, une ambiance, un quartier. La recherche fait le reste.",
   },
   {
-    number: "03",
-    title: "Sois visible",
-    description:
-      "Une fois validée, ta fiche apparaît sur Resto auprès des utilisateurs autour de toi.",
-    rotate: -3,
+    title: "Pars manger",
+    description: "Tu as vu le menu, les prix et les avis. Tu suis l'itinéraire et tu y vas.",
   },
 ];
 
 export default function HowItWorks() {
   return (
-    <section className="bg-canvas bg-grain py-24 px-6">
-      <p className="text-center text-xs font-semibold tracking-[0.3em] text-primary-dark">
-        COMMENT ÇA MARCHE
-      </p>
-      <h2 className="text-stamp mt-3 text-center text-3xl text-ink md:text-4xl">
-        Trois étapes, et te voilà référencé
-      </h2>
+    <section id="comment-ca-marche" className="bg-white px-6 py-20 md:px-10">
+      <div className="mx-auto max-w-6xl">
+        <h2 className="text-3xl font-bold text-ink sm:text-4xl">Trois étapes, et tu sais où tu manges</h2>
 
-      <div className="relative mx-auto mt-16 grid max-w-5xl grid-cols-1 gap-14 md:grid-cols-3 md:gap-8">
-        <div
-          aria-hidden
-          className="absolute left-0 right-0 top-8 hidden border-t-2 border-dashed border-ink/20 md:block"
-        />
-        {STEPS.map((step, index) => (
-          <motion.div
-            key={step.number}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.5 }}
-            transition={{ duration: 0.4, delay: index * 0.15 }}
-            className="relative text-center"
-          >
-            <motion.div
-              initial={{ scale: 0, rotate: step.rotate * 2 }}
-              whileInView={{ scale: 1, rotate: step.rotate }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.55, delay: index * 0.15 + 0.1, ease: "backOut" }}
-              className="cut-corners-sm relative z-10 mx-auto mb-5 flex h-16 w-16 items-center justify-center bg-primary text-lg font-bold text-paper shadow-[4px_4px_0_var(--color-ink)]"
-            >
-              {step.number}
-            </motion.div>
-            <h3 className="text-stamp text-lg text-ink">{step.title}</h3>
-            <p className="mx-auto mt-2 max-w-xs text-sm text-ink/70">
-              {step.description}
-            </p>
-          </motion.div>
-        ))}
+        <div className="mt-10 grid grid-cols-1 gap-10 sm:grid-cols-3">
+          {STEPS.map((step, index) => (
+            <div key={step.title}>
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary text-lg font-bold text-white">
+                {index + 1}
+              </span>
+              <p className="mt-4 font-bold text-ink">{step.title}</p>
+              <p className="mt-1 text-sm text-ink/60">{step.description}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
