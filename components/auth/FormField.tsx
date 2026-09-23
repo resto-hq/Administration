@@ -9,6 +9,7 @@ export default function FormField({
     <div>
       <label htmlFor={id} className="mb-1.5 block text-sm font-semibold text-ink">
         {label}
+        {inputProps.required && <span className="text-primary"> *</span>}
       </label>
       <input
         id={id}
